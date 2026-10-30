@@ -1,0 +1,29 @@
+{
+  "name": "Splitedb — EDB",
+  "short_name": "Splitedb",
+  "description": "Two-person expense tab for a trip: who paid, whose share it was, who owes whom.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#050a0e",
+  "theme_color": "#050a0e",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
