@@ -1,7 +1,7 @@
 /* Splitedb service worker — keeps the app opening with no signal.
    App files: network first (so updates arrive), cached copy when offline.
    Fonts: cached on first use. Your data lives in the browser's storage, not here. */
-const CACHE = 'splitedb-0.2.1';
+const CACHE = 'splitedb-0.3.0';
 const FONTS = 'splitedb-fonts';
 const CORE = ['./', './index.html', './edb-brand.css', './manifest.webmanifest',
   './apple-touch-icon.png', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
