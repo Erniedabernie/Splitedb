@@ -237,6 +237,45 @@ input[type="date"]::-webkit-date-and-time-value{text-align:left}
 .ptile{padding:10px}
 .led-h{margin-top:24px}
 
+/* ── v0.4 · calendar and days views ── */
+.vtabs{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:24px 0 6px}
+.vtabs .segmented button{padding:6px 12px;font-size:13px}
+@media (pointer:coarse){.vtabs .segmented button{min-height:40px}}
+.cal-wd{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;font-size:11px;color:var(--muted-text);text-align:center;margin:6px 0 4px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.cal-cell{height:66px;box-sizing:border-box;padding:4px;border-radius:var(--radius-lg);display:flex;flex-direction:column;justify-content:space-between;align-items:stretch;text-align:left;background:var(--surface);border:1px solid var(--border);color:var(--text);font:inherit;cursor:pointer;min-width:0;overflow:hidden}
+.cal-cell .dn{font-family:var(--font-mono);font-size:11px;white-space:nowrap}
+.cal-cell .mbs{display:flex;flex-direction:column;gap:2px;min-width:0}
+.cal-cell .mb{display:block;height:5px;border-radius:2px;max-width:100%}
+.cal-cell .more{font-family:var(--font-mono);font-size:11px;color:var(--muted-text);line-height:1}
+.cal-cell.off{background:transparent;border-color:transparent;cursor:default}
+.cal-cell.off .dn{color:var(--muted)}
+.cal-cell[aria-pressed="true"]{border-color:var(--accent-text);box-shadow:inset 0 0 0 1px var(--accent-text);background:var(--surface-high)}
+.cal-cell:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.cal-det-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:16px 2px 6px;font-size:15px;font-weight:600}
+.crow{width:100%;display:flex;flex-direction:column;gap:5px;padding:10px 12px;background:none;border:0;color:var(--text);font:inherit;text-align:left;cursor:pointer;min-width:0}
+.crow:hover{background:var(--surface-high)}
+.crow:disabled{cursor:default}
+.crow .top{display:flex;justify-content:space-between;gap:8px;font-size:14px;min-width:0}
+.crow .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.crow .bar{display:block;height:10px;border-radius:3px}
+.crow .sub{font-size:12px;color:var(--muted-text)}
+.drow{width:100%;display:grid;grid-template-columns:74px minmax(0,1fr) 82px;align-items:center;gap:10px;min-height:50px;padding:0 12px;background:none;border:0;color:var(--text);font:inherit;text-align:left;cursor:pointer}
+.drow:hover{background:var(--surface-high)}
+.drow .dl{display:flex;flex-direction:column;line-height:1.2}
+.drow .wd{font-size:12px;color:var(--muted-text)}
+.drow .dl .mono{font-size:12px}
+.drow .dbar{display:block;height:12px;background:var(--surface-high);border-radius:3px;overflow:hidden}
+.drow .dbar>span{display:flex;gap:1px;height:100%}
+.drow .dbar i{display:block;height:100%}
+.drow .amt{font-size:13px;text-align:right}
+.vkey{display:flex;flex-wrap:wrap;gap:6px 16px;margin:10px 2px 0;font-size:12px;color:var(--muted-text)}
+.vkey>span{display:inline-flex;align-items:center;gap:6px}
+.vkey .sw{width:10px;height:10px}
+.share-btn{width:100%;justify-content:center;margin-top:12px;min-height:46px}
+.share-prev img{display:block;width:100%;height:auto;border-radius:var(--radius-lg);border:1px solid var(--border)}
+.share-prev{max-height:58vh;overflow:auto;border-radius:var(--radius-lg)}
+
 /* hosted: keep content clear of the status bar (claude.ai's frame does this for the artifact) */
 :root{padding-top:env(safe-area-inset-top,0px)}
 </style>
@@ -248,7 +287,7 @@ input[type="date"]::-webkit-date-and-time-value{text-align:left}
 <defs><mask id="edb-stem" maskUnits="userSpaceOnUse" x="-20" y="-20" width="700" height="260"><rect x="-20" y="-20" width="700" height="260" fill="#fff"/><rect x="-10" y="18" width="72" height="196" fill="#000"/></mask></defs>
 <g><g mask="url(#edb-stem)"><path transform="translate(0,190) scale(0.2,-0.2)" d="M726 214Q735 209 735 203Q735 199 732 193L638 -5Q634 -14 626 -14Q621 -14 617 -10L612 -5Q607 0 592 0L45 0Q30 0 30 15L30 45Q30 60 45 60L47 60Q119 60 119 155L119 594Q119 689 46 689L45 689Q30 689 30 704L30 734Q30 750 45 750L546 750Q559 750 565 755L571 760Q574 763 579 763Q587 763 592 755L671 619Q674 615 674 610Q674 603 666 598L626 576Q619 572 615 572Q608 572 603 581L600 586Q569 638 533.5 658.5Q498 679 440 679L278 679L278 444L366 444Q411 444 436 461Q461 478 461 511L461 518Q461 533 476 533L506 533Q521 533 521 518L521 291Q521 276 506 276L476 276Q461 276 461 291L461 297Q461 331 436.5 347.5Q412 364 366 364L278 364L278 166Q278 71 347 71L412 71Q486 71 532.5 85Q579 99 610.5 132Q642 165 670 221L673 227Q678 235 686 235Q691 235 694 233L726 214Z"/></g><path transform="translate(20,38)" fill-rule="evenodd" d="M46 2 L46 152 L10 152 L10 149 C12 147 14 144 14 138 L14 74 C14 70 12 68 10 62 C6 51 3 45 3 38 C3 20 12 1 46 2 Z M23 22 a4 4 0 0 1 8 0 v20 h-8 Z M20.5 42 h13 v7 a3 3 0 0 1 -3 3 h-7 a3 3 0 0 1 -3 -3 Z M28.7 78 h2.6 v60 h-2.6 Z"/></g><g transform="translate(155,0)"><path transform="translate(0,190) scale(0.2,-0.2)" d="M353 750Q473 750 563.5 705Q654 660 704.5 576Q755 492 755 376Q755 257 709 172.5Q663 88 579 44Q495 0 381 0L45 0Q30 0 30 15L30 45Q30 60 45 60L52 60Q85 60 102 85Q119 110 119 155L119 595Q119 690 46 690L45 690Q30 690 30 705L30 735Q30 750 45 750L353 750ZM278 150Q278 111 291 88Q304 65 352 65Q471 65 537 139Q603 213 603 376Q603 521 535 605.5Q467 690 325 690L278 690L278 150Z"/></g><g transform="translate(311,0)"><path transform="translate(0,190) scale(0.2,-0.2)" d="M367 750Q437 750 492.5 726Q548 702 581 661Q614 620 614 569Q614 526 588 490Q562 454 513 429Q591 407 635 351.5Q679 296 679 221Q679 156 645 106Q611 56 551 28Q491 0 412 0L45 0Q30 0 30 15L30 45Q30 60 45 60Q119 60 119 155L119 595Q119 690 45 690Q30 690 30 705L30 735Q30 750 45 750L367 750ZM335 448Q397 448 430.5 480Q464 512 464 569Q464 626 431 658Q398 690 339 690L278 690L278 448L335 448ZM369 60Q445 60 487 102.5Q529 145 529 221Q529 377 336 377L278 377L278 155Q278 109 295 84.5Q312 60 344 60L369 60Z"/></g>
 </g></defs></svg>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="ph-arrow-left" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"/></symbol><symbol id="ph-arrow-right" viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></symbol><symbol id="ph-caret-down" viewBox="0 0 256 256"><path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"/></symbol><symbol id="ph-download-simple" viewBox="0 0 256 256"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></symbol><symbol id="ph-gear" viewBox="0 0 256 256"><path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm88-29.84q.06-2.16,0-4.32l14.92-18.64a8,8,0,0,0,1.48-7.06,107.21,107.21,0,0,0-10.88-26.25,8,8,0,0,0-6-3.93l-23.72-2.64q-1.48-1.56-3-3L186,40.54a8,8,0,0,0-3.94-6,107.71,107.71,0,0,0-26.25-10.87,8,8,0,0,0-7.06,1.49L130.16,40Q128,40,125.84,40L107.2,25.11a8,8,0,0,0-7.06-1.48A107.6,107.6,0,0,0,73.89,34.51a8,8,0,0,0-3.93,6L67.32,64.27q-1.56,1.49-3,3L40.54,70a8,8,0,0,0-6,3.94,107.71,107.71,0,0,0-10.87,26.25,8,8,0,0,0,1.49,7.06L40,125.84Q40,128,40,130.16L25.11,148.8a8,8,0,0,0-1.48,7.06,107.21,107.21,0,0,0,10.88,26.25,8,8,0,0,0,6,3.93l23.72,2.64q1.49,1.56,3,3L70,215.46a8,8,0,0,0,3.94,6,107.71,107.71,0,0,0,26.25,10.87,8,8,0,0,0,7.06-1.49L125.84,216q2.16.06,4.32,0l18.64,14.92a8,8,0,0,0,7.06,1.48,107.21,107.21,0,0,0,26.25-10.88,8,8,0,0,0,3.93-6l2.64-23.72q1.56-1.48,3-3L215.46,186a8,8,0,0,0,6-3.94,107.71,107.71,0,0,0,10.87-26.25,8,8,0,0,0-1.49-7.06Zm-16.1-6.5a73.93,73.93,0,0,1,0,8.68,8,8,0,0,0,1.74,5.48l14.19,17.73a91.57,91.57,0,0,1-6.23,15L187,173.11a8,8,0,0,0-5.1,2.64,74.11,74.11,0,0,1-6.14,6.14,8,8,0,0,0-2.64,5.1l-2.51,22.58a91.32,91.32,0,0,1-15,6.23l-17.74-14.19a8,8,0,0,0-5-1.75h-.48a73.93,73.93,0,0,1-8.68,0,8,8,0,0,0-5.48,1.74L100.45,215.8a91.57,91.57,0,0,1-15-6.23L82.89,187a8,8,0,0,0-2.64-5.1,74.11,74.11,0,0,1-6.14-6.14,8,8,0,0,0-5.1-2.64L46.43,170.6a91.32,91.32,0,0,1-6.23-15l14.19-17.74a8,8,0,0,0,1.74-5.48,73.93,73.93,0,0,1,0-8.68,8,8,0,0,0-1.74-5.48L40.2,100.45a91.57,91.57,0,0,1,6.23-15L69,82.89a8,8,0,0,0,5.1-2.64,74.11,74.11,0,0,1,6.14-6.14A8,8,0,0,0,82.89,69L85.4,46.43a91.32,91.32,0,0,1,15-6.23l17.74,14.19a8,8,0,0,0,5.48,1.74,73.93,73.93,0,0,1,8.68,0,8,8,0,0,0,5.48-1.74L155.55,40.2a91.57,91.57,0,0,1,15,6.23L173.11,69a8,8,0,0,0,2.64,5.1,74.11,74.11,0,0,1,6.14,6.14,8,8,0,0,0,5.1,2.64l22.58,2.51a91.32,91.32,0,0,1,6.23,15l-14.19,17.74A8,8,0,0,0,199.87,123.66Z"/></symbol><symbol id="ph-list" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"/></symbol><symbol id="ph-pencil-simple" viewBox="0 0 256 256"><path d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.68,147.31,64l24-24L216,84.68Z"/></symbol><symbol id="ph-plus" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></symbol><symbol id="ph-trash" viewBox="0 0 256 256"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"/></symbol><symbol id="ph-upload-simple" viewBox="0 0 256 256"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0ZM93.66,77.66,120,51.31V144a8,8,0,0,0,16,0V51.31l26.34,26.35a8,8,0,0,0,11.32-11.32l-40-40a8,8,0,0,0-11.32,0l-40,40A8,8,0,0,0,93.66,77.66Z"/></symbol><symbol id="ph-x" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></symbol></defs></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="ph-arrow-left" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"/></symbol><symbol id="ph-arrow-right" viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></symbol><symbol id="ph-caret-down" viewBox="0 0 256 256"><path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"/></symbol><symbol id="ph-download-simple" viewBox="0 0 256 256"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></symbol><symbol id="ph-export" viewBox="0 0 256 256"><path d="M216,112v96a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V112A16,16,0,0,1,56,96H80a8,8,0,0,1,0,16H56v96H200V112H176a8,8,0,0,1,0-16h24A16,16,0,0,1,216,112ZM93.66,69.66,120,43.31V136a8,8,0,0,0,16,0V43.31l26.34,26.35a8,8,0,0,0,11.32-11.32l-40-40a8,8,0,0,0-11.32,0l-40,40A8,8,0,0,0,93.66,69.66Z"/></symbol><symbol id="ph-gear" viewBox="0 0 256 256"><path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm88-29.84q.06-2.16,0-4.32l14.92-18.64a8,8,0,0,0,1.48-7.06,107.21,107.21,0,0,0-10.88-26.25,8,8,0,0,0-6-3.93l-23.72-2.64q-1.48-1.56-3-3L186,40.54a8,8,0,0,0-3.94-6,107.71,107.71,0,0,0-26.25-10.87,8,8,0,0,0-7.06,1.49L130.16,40Q128,40,125.84,40L107.2,25.11a8,8,0,0,0-7.06-1.48A107.6,107.6,0,0,0,73.89,34.51a8,8,0,0,0-3.93,6L67.32,64.27q-1.56,1.49-3,3L40.54,70a8,8,0,0,0-6,3.94,107.71,107.71,0,0,0-10.87,26.25,8,8,0,0,0,1.49,7.06L40,125.84Q40,128,40,130.16L25.11,148.8a8,8,0,0,0-1.48,7.06,107.21,107.21,0,0,0,10.88,26.25,8,8,0,0,0,6,3.93l23.72,2.64q1.49,1.56,3,3L70,215.46a8,8,0,0,0,3.94,6,107.71,107.71,0,0,0,26.25,10.87,8,8,0,0,0,7.06-1.49L125.84,216q2.16.06,4.32,0l18.64,14.92a8,8,0,0,0,7.06,1.48,107.21,107.21,0,0,0,26.25-10.88,8,8,0,0,0,3.93-6l2.64-23.72q1.56-1.48,3-3L215.46,186a8,8,0,0,0,6-3.94,107.71,107.71,0,0,0,10.87-26.25,8,8,0,0,0-1.49-7.06Zm-16.1-6.5a73.93,73.93,0,0,1,0,8.68,8,8,0,0,0,1.74,5.48l14.19,17.73a91.57,91.57,0,0,1-6.23,15L187,173.11a8,8,0,0,0-5.1,2.64,74.11,74.11,0,0,1-6.14,6.14,8,8,0,0,0-2.64,5.1l-2.51,22.58a91.32,91.32,0,0,1-15,6.23l-17.74-14.19a8,8,0,0,0-5-1.75h-.48a73.93,73.93,0,0,1-8.68,0,8,8,0,0,0-5.48,1.74L100.45,215.8a91.57,91.57,0,0,1-15-6.23L82.89,187a8,8,0,0,0-2.64-5.1,74.11,74.11,0,0,1-6.14-6.14,8,8,0,0,0-5.1-2.64L46.43,170.6a91.32,91.32,0,0,1-6.23-15l14.19-17.74a8,8,0,0,0,1.74-5.48,73.93,73.93,0,0,1,0-8.68,8,8,0,0,0-1.74-5.48L40.2,100.45a91.57,91.57,0,0,1,6.23-15L69,82.89a8,8,0,0,0,5.1-2.64,74.11,74.11,0,0,1,6.14-6.14A8,8,0,0,0,82.89,69L85.4,46.43a91.32,91.32,0,0,1,15-6.23l17.74,14.19a8,8,0,0,0,5.48,1.74,73.93,73.93,0,0,1,8.68,0,8,8,0,0,0,5.48-1.74L155.55,40.2a91.57,91.57,0,0,1,15,6.23L173.11,69a8,8,0,0,0,2.64,5.1,74.11,74.11,0,0,1,6.14,6.14,8,8,0,0,0,5.1,2.64l22.58,2.51a91.32,91.32,0,0,1,6.23,15l-14.19,17.74A8,8,0,0,0,199.87,123.66Z"/></symbol><symbol id="ph-list" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"/></symbol><symbol id="ph-pencil-simple" viewBox="0 0 256 256"><path d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.68,147.31,64l24-24L216,84.68Z"/></symbol><symbol id="ph-plus" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></symbol><symbol id="ph-trash" viewBox="0 0 256 256"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"/></symbol><symbol id="ph-upload-simple" viewBox="0 0 256 256"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0ZM93.66,77.66,120,51.31V144a8,8,0,0,0,16,0V51.31l26.34,26.35a8,8,0,0,0,11.32-11.32l-40-40a8,8,0,0,0-11.32,0l-40,40A8,8,0,0,0,93.66,77.66Z"/></symbol><symbol id="ph-x" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></symbol></defs></svg>
 
 <div class="wrap">
   <header class="hdr">
@@ -276,7 +315,7 @@ input[type="date"]::-webkit-date-and-time-value{text-align:left}
           <p class="sync-line" id="sync-line"></p>
           <div class="about">
             <span class="mark"><svg viewBox="20 35 434 158"><use href="#edb-mark"/></svg></span>
-            <span class="v">v0.3 · EDB v2.0.0</span><span>© Ernest Tung</span>
+            <span class="v">v0.4 · EDB v2.0.0</span><span>© Ernest Tung</span>
           </div>
         </div>
       </div>
@@ -327,8 +366,10 @@ input[type="date"]::-webkit-date-and-time-value{text-align:left}
       <div class="tiles" id="tiles"></div>
       <div class="total-line" id="total-line"></div>
 
-      <div class="led-h"><h2>Entries</h2><span class="caption mono" id="led-count"></span></div>
+      <div class="vtabs"><div class="segmented" role="tablist" aria-label="View" id="vtabs"><button role="tab" data-v="entries">Entries</button><button role="tab" data-v="cal">Calendar</button><button role="tab" data-v="days">Days</button></div><span class="caption mono" id="led-count"></span></div>
       <div id="ledger"></div>
+      <div id="calview" hidden></div>
+      <div id="daysview" hidden></div>
     </section>
   </main>
 </div>
@@ -572,17 +613,8 @@ function renderTab(t){
   var days=t.start?Math.max(1,Math.min(daysBetween(t.start,t.end&&todayISO()>t.end?t.end:todayISO())+1,t.end?daysBetween(t.start,t.end)+1:9999)):1;
   $('#total-line').innerHTML=c.nExp?'<span>Spent together</span><span class="mono">'+fmt(T,'HKD')+(days>1&&todayISO()>=t.start?' · '+fmt(Math.round(T/days),'HKD',{short:true})+'/day':'')+'</span>':'';
 
-  /* ledger */
-  $('#led-count').textContent=list.length?list.length+(list.length===1?' entry':' entries'):'';
-  if(!list.length){$('#ledger').innerHTML='<div class="led-empty">'+(t.settled?'No entries on this tab.':'Add the first expense with the button below. Amounts can be in '+t.currencies.map(function(k){return CUR[k].sym}).join(', ')+'.')+'</div>';return}
-  var byDay={};list.forEach(function(e){(byDay[e.date]=byDay[e.date]||[]).push(e)});
-  var html=Object.keys(byDay).sort().reverse().map(function(d){
-    var rows=byDay[d].sort(function(a,b){return (b.createdAt||0)-(a.createdAt||0)});
-    var dayTotal=rows.reduce(function(s,e){return s+(e.kind==='payment'?0:e.base)},0);
-    return '<div class="day"><div class="day-h"><span>'+dayName(d)+' <span class="mono">'+dmy(d)+'</span></span><span class="mono">'+(dayTotal?fmt(dayTotal,'HKD'):'')+'</span></div><ul class="rows">'+
-      rows.map(function(e){return '<li>'+rowHTML(t,e)+'</li>'}).join('')+'</ul></div>';
-  }).join('');
-  $('#ledger').innerHTML=html;
+  /* lower section */
+  renderLower(t,list);
 }
 function splitText(t,e){
   if(!e.split)return '';
@@ -605,6 +637,165 @@ function renderSync(){
   if(sync.mode==='cloud'){el.textContent=pend?(sync.waiting?'Offline · '+pend+' unsaved':'Saving…'):'';line.textContent=pend?pend+' change'+(pend>1?'s':'')+' waiting to save. They are kept on this phone until then.':'Saved to your Claude account.'}
   else if(sync.mode==='local'){el.textContent='';line.textContent='Saved on this device only. Use Back up now and then to keep a copy.'}
   else{el.textContent='';line.textContent='Connecting…'}
+}
+
+/* ── lower section: entries · calendar · days (v0.4) ──────
+   Every bar is coloured by who paid, in that person's colour.
+   "Paid back" entries move money but are not spending, so they stay out of the calendar and days views. */
+S.view=lsGet('splitedb:view')||'entries';if(['entries','cal','days'].indexOf(S.view)<0)S.view='entries';
+S.calSel=null;
+var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function addDays(iso,n){var p=iso.split('-');return new Date(Date.UTC(+p[0],+p[1]-1,+p[2]+n)).toISOString().slice(0,10)}
+function dow(iso){var p=iso.split('-');return (new Date(Date.UTC(+p[0],+p[1]-1,+p[2])).getUTCDay()+6)%7}
+function spendOf(list){return list.filter(function(e){return e.kind!=='payment'})}
+function byDate(exp){var by={};exp.forEach(function(e){(by[e.date]=by[e.date]||[]).push(e)});return by}
+function sumBase(arr){return arr.reduce(function(s,e){return s+e.base},0)}
+/* the stretch of days to show: the tab's dates, widened to cover every expense; open-ended tabs run to the last expense (or today, when close) */
+function tabRange(t,exp){
+  var dates=exp.map(function(e){return e.date}).sort();
+  var start=t.start||dates[0];if(!start)return null;
+  if(dates.length&&dates[0]<start)start=dates[0];
+  var last=dates.length?dates[dates.length-1]:start;
+  var end=t.end||(last>start?last:start);
+  if(!t.end){var today=todayISO();if(today>end&&daysBetween(start,today)<=62)end=today}
+  if(last>end)end=last;
+  if(daysBetween(start,end)>69)start=addDays(end,-69);
+  return {start:start,end:end};
+}
+function payerFill(e){return 'var(--p'+e.payer+')'}
+function legendHTML(t){return '<p class="vkey"><span><span class="sw" style="background:var(--p0)"></span>'+esc(pname(t,0))+' paid</span><span><span class="sw" style="background:var(--p1)"></span>'+esc(pname(t,1))+' paid</span></p>'}
+function shareBtnHTML(){return '<button class="btn btn-ghost share-btn" data-share>'+icon('export')+'Share as picture</button>'}
+
+function renderLower(t,list){
+  var v=S.view;
+  $$('#vtabs button').forEach(function(b){var on=b.dataset.v===v;b.classList.toggle('active',on);b.setAttribute('aria-selected',String(on))});
+  $('#ledger').hidden=v!=='entries';$('#calview').hidden=v!=='cal';$('#daysview').hidden=v!=='days';
+  $('#led-count').textContent=list.length?list.length+(list.length===1?' entry':' entries'):'';
+  if(v==='entries')renderLedger(t,list);
+  else if(v==='cal')renderCal(t,list);
+  else renderDays(t,list);
+}
+
+function renderLedger(t,list){
+  if(!list.length){$('#ledger').innerHTML='<div class="led-empty">'+(t.settled?'No entries on this tab.':'Add the first expense with the button below. Amounts can be in '+t.currencies.map(function(k){return CUR[k].sym}).join(', ')+'.')+'</div>';return}
+  var byDay={};list.forEach(function(e){(byDay[e.date]=byDay[e.date]||[]).push(e)});
+  $('#ledger').innerHTML=Object.keys(byDay).sort().reverse().map(function(d){
+    var rows=byDay[d].sort(function(a,b){return (b.createdAt||0)-(a.createdAt||0)});
+    var dayTotal=rows.reduce(function(s,e){return s+(e.kind==='payment'?0:e.base)},0);
+    return '<div class="day"><div class="day-h"><span>'+dayName(d)+' <span class="mono">'+dmy(d)+'</span></span><span class="mono">'+(dayTotal?fmt(dayTotal,'HKD'):'')+'</span></div><ul class="rows">'+
+      rows.map(function(e){return '<li>'+rowHTML(t,e)+'</li>'}).join('')+'</ul></div>';
+  }).join('');
+}
+
+function renderCal(t,list){
+  var box=$('#calview');var exp=spendOf(list);var rg=tabRange(t,exp);
+  if(!rg||!exp.length){box.innerHTML='<div class="led-empty">The calendar fills in as you add expenses.</div>';return}
+  var by=byDate(exp);
+  var maxEv=Math.max.apply(null,exp.map(function(e){return e.base}));
+  var g0=addDays(rg.start,-dow(rg.start)),g1=addDays(rg.end,6-dow(rg.end));
+  var today=todayISO(),sel=S.calSel;
+  if(!sel||sel<rg.start||sel>rg.end)sel=(today>=rg.start&&today<=rg.end&&by[today])?today:Object.keys(by).sort().pop();
+  S.calSel=sel;
+  var cells=[];
+  for(var d=g0;d<=g1;d=addDays(d,1)){
+    var p=d.split('-');var label=p[2]==='01'?'1 '+MONTHS[+p[1]-1]:String(+p[2]);
+    if(d<rg.start||d>rg.end){cells.push('<span class="cal-cell off" aria-hidden="true"><span class="dn">'+label+'</span></span>');continue}
+    var ev=(by[d]||[]).slice().sort(function(a,b){return b.base-a.base});
+    var bars=ev.slice(0,4).map(function(e){return '<span class="mb" style="width:'+Math.max(10,Math.round(e.base/maxEv*100))+'%;background:'+payerFill(e)+'"></span>'}).join('');
+    var more=ev.length>4?'<span class="more">+'+(ev.length-4)+'</span>':'';
+    cells.push('<button class="cal-cell" data-d="'+d+'" aria-pressed="'+(d===sel)+'" aria-label="'+dayName(d)+' '+dmy(d)+', '+fmt(sumBase(ev),'HKD',{short:true})+', '+ev.length+(ev.length===1?' expense':' expenses')+'"><span class="dn">'+label+'</span><span class="mbs">'+bars+more+'</span></button>');
+  }
+  var sev=(by[sel]||[]).slice().sort(function(a,b){return (a.createdAt||0)-(b.createdAt||0)});
+  var det='<div class="cal-det-h"><span>'+dayName(sel)+' <span class="mono">'+dmy(sel)+'</span> · '+sev.length+(sev.length===1?' expense':' expenses')+'</span><span class="mono">'+fmt(sumBase(sev),'HKD')+'</span></div>'+
+    (sev.length?'<ul class="rows">'+sev.map(function(e){
+      return '<li><button class="crow" data-id="'+esc(e.id)+'"'+(t.settled?' disabled':'')+'><span class="top"><span class="nm">'+esc(e.desc||'Expense')+'</span><span class="mono">'+fmt(e.amount,e.cur)+'</span></span>'+
+        '<span class="bar" style="width:'+Math.max(4,Math.round(e.base/maxEv*100))+'%;background:'+payerFill(e)+'"></span>'+
+        '<span class="sub">'+esc(pname(t,e.payer))+' paid · '+esc(splitText(t,e))+(e.cur!=='HKD'?' · '+fmt(e.base,'HKD'):'')+'</span></button></li>';
+    }).join('')+'</ul>':'<div class="led-empty">Nothing spent on this day.</div>');
+  box.innerHTML='<div class="cal-wd"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div><div class="cal-grid">'+cells.join('')+'</div>'+det+legendHTML(t)+shareBtnHTML();
+}
+
+function daysToShow(rg,by){var all=daysBetween(rg.start,rg.end)<=31;var ds=[];for(var d=rg.start;d<=rg.end;d=addDays(d,1)){if(all||by[d])ds.push(d)}return ds}
+function renderDays(t,list){
+  var box=$('#daysview');var exp=spendOf(list);var rg=tabRange(t,exp);
+  if(!rg||!exp.length){box.innerHTML='<div class="led-empty">Days fill in as you add expenses.</div>';return}
+  var by=byDate(exp);var ds=daysToShow(rg,by);
+  var maxDay=Math.max.apply(null,ds.map(function(d){return sumBase(by[d]||[])}).concat([1]));
+  box.innerHTML='<ul class="rows">'+ds.map(function(d){
+    var ev=by[d]||[];var pb=[0,0];ev.forEach(function(e){pb[e.payer]+=e.base});var tt=pb[0]+pb[1];
+    return '<li><button class="drow" data-d="'+d+'" aria-label="'+dayName(d)+' '+dmy(d)+', '+fmt(tt,'HKD',{short:true})+'"><span class="dl"><span class="wd">'+dayName(d)+(ev.length?' · '+ev.length:'')+'</span><span class="mono">'+dmy(d).slice(0,5)+'</span></span>'+
+      '<span class="dbar"><span style="width:'+(tt?Math.max(3,Math.round(tt/maxDay*100)):0)+'%">'+(pb[0]?'<i style="flex:'+pb[0]+';background:var(--p0)"></i>':'')+(pb[1]?'<i style="flex:'+pb[1]+';background:var(--p1)"></i>':'')+'</span></span>'+
+      '<span class="mono amt">'+(tt?fmt(tt,'HKD',{short:true}):'–')+'</span></button></li>';
+  }).join('')+'</ul>'+legendHTML(t)+shareBtnHTML();
+}
+
+/* ── share as picture: drawn on a canvas, so it works offline and needs no library ── */
+function rr(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
+function fitText(g,s,w){if(g.measureText(s).width<=w)return s;while(s.length>1&&g.measureText(s+'…').width>w)s=s.slice(0,-1);return s+'…'}
+function makeShareImage(t){
+  var list=tabEntries(t),exp=spendOf(list),c=calc(list);
+  var rg=tabRange(t,exp)||{start:t.start||todayISO(),end:t.end||t.start||todayISO()};
+  var by=byDate(exp),ds=daysToShow(rg,by);if(ds.length>40)ds=ds.slice(-40);
+  var maxDay=Math.max.apply(null,ds.map(function(d){return sumBase(by[d]||[])}).concat([1]));
+  var W=1080,M=48,X=M+56,R=W-M-56,rowH=60,H=600+ds.length*rowH+190;
+  var cv=document.createElement('canvas');cv.width=W;cv.height=H;var g=cv.getContext('2d');
+  var cs=getComputedStyle(document.documentElement);function tok(n,f){return (cs.getPropertyValue(n)||'').trim()||f}
+  var BG=tok('--bg','#050a0e'),SF=tok('--surface','#091622'),TX=tok('--text','#eaf4ff'),MU=tok('--muted-text','#6a90b8'),BD=tok('--border','#16293d');
+  var col=[t.people[0].colour,t.people[1].colour];
+  var SERIF='"EB Garamond", Georgia, serif',MONO='"Fira Mono", Menlo, monospace',SANS='"Source Sans 3", -apple-system, sans-serif';
+  var ready=document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve();
+  return ready.then(function(){
+    g.fillStyle=BG;g.fillRect(0,0,W,H);
+    rr(g,M,M,W-2*M,H-2*M,24);g.fillStyle=SF;g.fill();g.strokeStyle=BD;g.lineWidth=2;g.stroke();
+    var y=M+92;g.textBaseline='alphabetic';
+    g.fillStyle=MU;g.font='500 26px '+SERIF;g.fillText('TRIP SPENDING',X,y);
+    y+=84;g.fillStyle=TX;g.font='700 78px '+SERIF;g.fillText(fitText(g,t.name,R-X),X,y);
+    var n=daysBetween(rg.start,rg.end)+1;
+    y+=52;g.fillStyle=MU;g.font='28px '+MONO;g.fillText(dmy(rg.start)+' – '+dmy(rg.end)+' · '+n+(n===1?' day':' days'),X,y);
+    y+=96;g.fillStyle=TX;g.font='600 66px '+MONO;g.fillText(fmt(c.total,'HKD',{short:true}),X,y);
+    y+=62;
+    [0,1].forEach(function(i){var x=X+i*((R-X)/2);g.fillStyle=col[i];rr(g,x,y-22,24,24,4);g.fill();g.fillStyle=TX;g.font='30px '+SANS;var lab=pname(t,i)+' paid';g.fillText(lab,x+38,y);var lw=g.measureText(lab).width;g.font='30px '+MONO;g.fillText(fmt(c.paid[i],'HKD',{short:true}),x+38+lw+14,y)});
+    y+=40;g.fillStyle=BD;g.fillRect(X,y,R-X,2);y+=50;
+    var bx=X+190,bw=R-X-190-210;
+    ds.forEach(function(d){
+      var ev=by[d]||[];var pb=[0,0];ev.forEach(function(e){pb[e.payer]+=e.base});var tt=pb[0]+pb[1];
+      g.fillStyle=MU;g.font='26px '+MONO;g.fillText(dayName(d)+' '+dmy(d).slice(0,5),X,y);
+      g.fillStyle=BD;rr(g,bx,y-24,bw,26,6);g.fill();
+      var w=tt?Math.max(6,tt/maxDay*bw):0,x=bx;
+      [0,1].forEach(function(i){if(!pb[i])return;var sw=w*pb[i]/tt;g.fillStyle=col[i];g.fillRect(x,y-24,Math.max(0,sw-(i===0&&pb[1]?2:0)),26);x+=sw});
+      g.fillStyle=tt?TX:MU;g.font='28px '+MONO;g.textAlign='right';g.fillText(tt?fmt(tt,'HKD',{short:true}):'–',R,y);g.textAlign='left';
+      y+=rowH;
+    });
+    y+=6;g.fillStyle=BD;g.fillRect(X,y-30,R-X,2);y+=40;
+    var net0=c.net[0];var owe=net0===0?'All square':(net0>0?pname(t,1)+' owes '+pname(t,0):pname(t,0)+' owes '+pname(t,1));
+    g.fillStyle=TX;g.font='34px '+SANS;g.fillText(owe,X,y);
+    if(net0){g.font='500 44px '+MONO;g.textAlign='right';g.fillText(fmt(Math.abs(net0),'HKD'),R,y);g.textAlign='left'}
+    g.fillStyle=MU;g.font='24px '+SANS;g.fillText('Made with Splitedb',X,H-M-36);
+    return new Promise(function(res){cv.toBlob(function(b){res(b)},'image/png')});
+  });
+}
+function shareSheet(){
+  var t=currentTab();if(!t)return;
+  var name=((t.name||'tab').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-|-$/g,'').toLowerCase()||'tab')+'-splitedb.png';
+  var foot='<div class="g2"><button class="btn btn-ghost" id="sp-save" hidden>'+icon('download-simple')+'Save image</button><button class="btn btn-primary" id="sp-share" hidden>'+icon('export')+'Share</button></div><p class="pnote" id="sp-note" hidden>Press and hold the picture to save it.</p>';
+  openSheet('Share picture','<div class="share-prev" id="sp-prev"><p class="pnote">Drawing the picture…</p></div>',function(sh){
+    makeShareImage(t).then(function(blob){
+      if(!blob){$('#sp-prev',sh).innerHTML='<p class="error-msg">The picture could not be made on this device.</p>';return}
+      var url=URL.createObjectURL(blob);
+      $('#sp-prev',sh).innerHTML='<img alt="Spending picture for '+esc(t.name)+'" src="'+url+'">';
+      var file=null;try{file=new File([blob],name,{type:'image/png'})}catch(e){}
+      var canShare=!window.claude&&file&&navigator.canShare&&navigator.canShare({files:[file]});
+      var canSave=!!(window.claude?DL:true);
+      var sb=$('#sp-share',sh),sv=$('#sp-save',sh);
+      sb.hidden=!canShare;sv.hidden=!canSave;$('#sp-note',sh).hidden=canShare||canSave;
+      if(!canShare){sv.classList.remove('btn-ghost');sv.classList.add('btn-primary')}
+      sb.addEventListener('click',function(){navigator.share({files:[file],title:t.name}).catch(function(){})});
+      sv.addEventListener('click',function(){
+        if(window.claude){if(DL)DL.save({filename:name,data:blob}).then(function(){toast('Picture saved · '+name)},function(e){if(!e||e.code!=='declined')toast('The picture could not be saved.','err')});return}
+        var a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){a.remove()},1500);toast('Picture saved · '+name);
+      });
+    },function(){$('#sp-prev',sh).innerHTML='<p class="error-msg">The picture could not be made on this device.</p>'});
+  },foot);
 }
 
 /* ── toast ─────────────────────────────────────────────── */
@@ -903,6 +1094,16 @@ document.body.classList.add('has-bottom-nav');
 $('#start-btn').addEventListener('click',function(){tabSheet(null)});
 $('#tab-btn').addEventListener('click',tabsSheet);
 $('#add-btn').addEventListener('click',function(){entrySheet(null)});
+$('#vtabs').addEventListener('click',function(ev){var b=ev.target.closest('button[data-v]');if(!b)return;S.view=b.dataset.v;lsSet('splitedb:view',S.view);render()});
+$('#calview').addEventListener('click',function(ev){
+  var c=ev.target.closest('.cal-cell[data-d]');if(c){S.calSel=c.dataset.d;render();return}
+  var r=ev.target.closest('.crow');if(r){if(!r.disabled){var e=S.entries[r.dataset.id];if(e)entrySheet(e)}return}
+  if(ev.target.closest('[data-share]'))shareSheet();
+});
+$('#daysview').addEventListener('click',function(ev){
+  var r=ev.target.closest('.drow');if(r){S.calSel=r.dataset.d;S.view='cal';lsSet('splitedb:view','cal');render();var v=$('#vtabs');if(v&&v.scrollIntoView)v.scrollIntoView({block:'start',behavior:'smooth'});return}
+  if(ev.target.closest('[data-share]'))shareSheet();
+});
 $('#ledger').addEventListener('click',function(ev){var b=ev.target.closest('.rowb');if(!b||b.disabled)return;var e=S.entries[b.dataset.id];if(e)entrySheet(e)});
 
 /* ── back up / restore ─────────────────────────────────── */
