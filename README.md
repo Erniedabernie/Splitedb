@@ -1,6 +1,6 @@
 # Splitedb
 
-A two-person expense tab for a short stretch of time, such as a trip. Add what each person paid, choose how it splits, and one ring shows who paid, whose share it was and who owes whom. Totals are in HK$; US$ and Indonesian rupiah convert at the tab's own rate.
+An expense tab for 2 to 10 people over a short stretch of time, such as a trip. Add what each person paid and who shares it; one ring shows who paid and whose share it was, and a short list says who pays whom to settle up. Totals are in HK$; US$ and Indonesian rupiah convert at the tab's own rate.
 
 ## Install on iPhone
 

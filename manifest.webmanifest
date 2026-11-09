@@ -1,7 +1,7 @@
 {
   "name": "Splitedb — EDB",
   "short_name": "Splitedb",
-  "description": "Two-person expense tab for a trip: who paid, whose share it was, who owes whom.",
+  "description": "Expense tab for a trip with 2 to 10 people: who paid, whose share it was, who pays whom.",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",

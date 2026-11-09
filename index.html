@@ -23,9 +23,9 @@
 
 /* ── SPLITEDB ──────────────────────────────────────────────
    Layout: one centred phone column (max 520px). Hero = tab name,
-   then the two-ring "who paid / whose share" chart, two person tiles,
+   then the two-ring "who paid / whose share" chart, person tiles (a list for 3+),
    and a day-grouped ledger. Add bar fixed to the bottom edge.
-   Person colours come from the EDB categorical palette (--p0 / --p1). */
+   Person colours --p0 … --p9 are set per tab (EDB categorical six + four for groups). */
 :root{--p0:#0ea5e9;--p1:#f5a524;--p0-on:#050a0e;--p1-on:#050a0e}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:110;background:var(--bg)}
 body.sheet-open{overflow:hidden}
@@ -145,6 +145,7 @@ body.sheet-open{overflow:hidden}
 .chip{min-height:36px;padding:6px 12px;border-radius:var(--radius-full);border:1px solid var(--border);background:none;color:var(--muted-text);font:inherit;font-size:13px;cursor:pointer;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .chip[aria-pressed="true"]{color:var(--text);border-color:var(--text);background:var(--surface-high)}
 .chip:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.chip,.pbtn,.srow,.pe-c,.swb{-webkit-tap-highlight-color:transparent}
 @media (pointer:coarse){.chip{min-height:44px}}
 
 .sbar{position:relative;height:48px;touch-action:none;cursor:pointer;-webkit-user-select:none;user-select:none}
@@ -276,6 +277,59 @@ input[type="date"]::-webkit-date-and-time-value{text-align:left}
 .share-prev img{display:block;width:100%;height:auto;border-radius:var(--radius-lg);border:1px solid var(--border)}
 .share-prev{max-height:58vh;overflow:auto;border-radius:var(--radius-lg)}
 
+/* ── v0.5 · groups of 2 to 10 ── */
+.tiles.as-list{display:block}
+.plist{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.plist li{display:grid;grid-template-columns:12px minmax(0,1fr) auto;column-gap:10px;row-gap:6px;align-items:center;padding:9px 12px}
+.plist li+li{border-top:1px solid var(--border)}
+.pl-m{display:flex;flex-direction:column;gap:1px;min-width:0}
+.pl-n{font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl-s{font-size:12px;color:var(--muted-text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl-s .mono{color:var(--text)}
+.pl-r{display:flex;flex-direction:column;align-items:flex-end;gap:1px}
+.pl-r .lab{font-size:11px;color:var(--muted-text)}
+.pl-r .mono{font-size:14px;font-weight:500;white-space:nowrap}
+.pl-r .mono.zero{color:var(--muted-text);font-weight:400}
+.pl-bars{grid-column:2 / 4;display:flex;flex-direction:column;gap:2px}
+.pl-bars .b2{height:4px;margin:0}
+.pl-key{margin-top:6px}
+.rc-s.txt{font-family:var(--font-ui);font-size:12px}
+.settle{margin-top:18px}
+.settle-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:0 2px 6px;font-size:15px;font-weight:600}
+.srow{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;min-height:50px;background:none;border:0;color:var(--text);font:inherit;font-size:14px;text-align:left;cursor:pointer}
+.srow:hover{background:var(--surface-high)}
+.srow:focus-visible{outline:none;box-shadow:inset 0 0 0 2px var(--accent)}
+.srow:disabled{cursor:default}.srow:disabled:hover{background:none}
+.srow .who{display:flex;align-items:center;gap:6px;min-width:0;overflow:hidden;white-space:nowrap}
+.srow .who .nm{overflow:hidden;text-overflow:ellipsis;min-width:0}
+.srow .who .icon{color:var(--muted-text);flex:none;margin:0 2px}
+.srow>.mono{flex:none}
+.settle .pnote{margin:6px 2px 0}
+/* add panel with a group: names wrap as chips, label sits on the first line */
+.irow.multi{align-items:flex-start}
+.irow.multi>.flabel{line-height:40px}
+.pp.many{display:flex;flex-wrap:wrap;gap:6px}
+.pp.many .pbtn{min-height:40px;padding:4px 10px;font-size:13px;gap:6px;flex:0 1 auto;max-width:100%}
+.pp.many .pbtn .sw{width:10px;height:10px}
+.pbtn:disabled{opacity:.35;cursor:default}
+.chip.pt{display:inline-flex;align-items:center;gap:6px}
+.chip.pt .sw{width:10px;height:10px}
+.chip.pt span:last-child{overflow:hidden;text-overflow:ellipsis}
+.chip.pt[aria-pressed="false"] .sw{opacity:.3}
+.chip.pt[aria-pressed="false"] span:last-child{text-decoration:line-through;text-decoration-color:var(--muted)}
+@media (pointer:coarse){.chip.pt,#f-all{min-height:40px}}
+.eqr{font-size:12px;color:var(--muted-text);margin:0 0 0 62px;font-family:var(--font-mono)}
+/* tab settings: one line per person, colour dot opens the palette */
+#t-people{display:flex;flex-direction:column;gap:8px}
+.pe{display:flex;align-items:center;gap:8px}
+.pe .input{flex:1;min-width:0}
+.pe-c{width:40px;height:40px;border-radius:50%;flex:none;cursor:pointer;padding:0;border:3px solid var(--surface);box-shadow:0 0 0 1px var(--border)}
+.pe-c[aria-expanded="true"]{box-shadow:0 0 0 2px var(--text)}
+.pe-c:focus-visible{outline:none;box-shadow:var(--focus-ring);}
+.pe-x{flex:none}
+.pe-pal{padding:2px 0 6px 48px}
+.t-addp{align-self:flex-start}
+
 /* hosted: keep content clear of the status bar (claude.ai's frame does this for the artifact) */
 :root{padding-top:env(safe-area-inset-top,0px)}
 </style>
@@ -315,7 +369,7 @@ input[type="date"]::-webkit-date-and-time-value{text-align:left}
           <p class="sync-line" id="sync-line"></p>
           <div class="about">
             <span class="mark"><svg viewBox="20 35 434 158"><use href="#edb-mark"/></svg></span>
-            <span class="v">v0.4 · EDB v2.0.0</span><span>© Ernest Tung</span>
+            <span class="v">v0.5 · EDB v2.0.0</span><span>© Ernest Tung</span>
           </div>
         </div>
       </div>
@@ -332,7 +386,7 @@ input[type="date"]::-webkit-date-and-time-value{text-align:left}
     <section id="v-empty" class="empty" hidden>
       <span class="tag">Splitedb</span>
       <h2>Start a tab</h2>
-      <p style="margin:12px auto 24px;max-width:34ch">A tab keeps track of what two people spend together over a set stretch of time, like a trip.</p>
+      <p style="margin:12px auto 24px;max-width:34ch">A tab keeps track of what 2 to 10 people spend together over a set stretch of time, like a trip.</p>
       <button class="btn btn-primary" id="start-btn"><svg class="icon" aria-hidden="true"><use href="#ph-plus"/></svg>Start a tab</button>
     </section>
 
@@ -348,12 +402,7 @@ input[type="date"]::-webkit-date-and-time-value{text-align:left}
           <title id="ring-t"></title>
           <circle class="trk" cx="120" cy="120" r="104" stroke-width="22"/>
           <circle class="trk" cx="120" cy="120" r="80" stroke-width="8"/>
-          <g transform="rotate(-90 120 120)">
-            <circle class="seg" id="o0" cx="120" cy="120" r="104" stroke-width="22" style="stroke:var(--p0)"/>
-            <circle class="seg" id="o1" cx="120" cy="120" r="104" stroke-width="22" style="stroke:var(--p1)"/>
-            <circle class="seg" id="i0" cx="120" cy="120" r="80" stroke-width="8" style="stroke:var(--p0)"/>
-            <circle class="seg" id="i1" cx="120" cy="120" r="80" stroke-width="8" style="stroke:var(--p1)"/>
-          </g>
+          <g transform="rotate(-90 120 120)" id="ring-g"></g>
         </svg>
         <div class="ring-c" aria-hidden="true">
           <span class="rc-l" id="rc-l"></span>
@@ -365,6 +414,7 @@ input[type="date"]::-webkit-date-and-time-value{text-align:left}
 
       <div class="tiles" id="tiles"></div>
       <div class="total-line" id="total-line"></div>
+      <div class="settle" id="settle" hidden></div>
 
       <div class="vtabs"><div class="segmented" role="tablist" aria-label="View" id="vtabs"><button role="tab" data-v="entries">Entries</button><button role="tab" data-v="cal">Calendar</button><button role="tab" data-v="days">Days</button></div><span class="caption mono" id="led-count"></span></div>
       <div id="ledger"></div>
@@ -394,7 +444,12 @@ var CUR = {
 var CUR_ORDER = ['HKD','USD','IDR'];
 var DEFAULT_RATES = {USD:7.8466, IDR:2300};   /* USD: HK$ per US$1 · IDR: Rp per HK$1 */
 var RATES_ASOF = '29/10/2026';
-var SWATCHES = [['#0ea5e9','Sky'],['#3fae82','Green'],['#6366f1','Indigo'],['#f5a524','Amber'],['#a11d33','Garnet'],['#8a9a8e','Sage']];
+/* People colours: EDB's six categorical hues, then four added for groups (v0.5), picked by search for the
+   largest normal-vision gap to every other colour (all new pairs ΔE ≥ 15). Ten hues cannot all be told apart
+   with colour-blindness, so a name is always written next to a colour. */
+var SWATCHES = [['#0ea5e9','Sky'],['#3fae82','Green'],['#6366f1','Indigo'],['#f5a524','Amber'],['#a11d33','Garnet'],['#8a9a8e','Sage'],['#e765cd','Orchid'],['#f0503d','Coral'],['#a644a0','Plum'],['#636906','Olive']];
+var AUTO_ORDER = [0,3,2,1,6,7,4,8,5,9];   /* the colour a new person gets: the next unused one, most distinct first */
+var MAXP = 10;
 var LS = 'splitedb:v1';
 /* Touch screens get the in-app number pad; a mouse and keyboard type straight into the field. */
 var TOUCH = !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
@@ -462,15 +517,39 @@ function splitPct(total,a){
   return [s0,s1];
 }
 function splitExact(total,amount,a0){if(!amount)return [0,total];var s0=Math.round(total*a0/amount);s0=Math.max(0,Math.min(total,s0));return [s0,total-s0]}
-function shares(e){if(!e.split)return [0,0];return e.split.mode==='exact'?splitExact(e.base,e.amount,e.split.a):splitPct(e.base,e.split.a)}
-function calc(list){
-  var r={paid:[0,0],share:[0,0],back:[0,0],recv:[0,0],net:[0,0],total:0,nExp:0,nPay:0};
+/* Equal split among the people in who (v0.5), integer-exact: leftover units go one each to the first people listed. */
+function splitEq(total,who,n){var r=zeros(n);var k=who.length;if(!k)return r;var q=Math.floor(total/k),left=total-q*k;who.forEach(function(i,j){r[i]+=q+(j<left?1:0)});return r}
+function zeros(n){var r=[];for(var i=0;i<n;i++)r.push(0);return r}
+/* Split shapes: {mode:'eq',who:[…]} (v0.5) · {mode:'pct',a,who?:[i,j]} (two people; no who = people 0 and 1) · {mode:'exact',a} (v0.2, kept for old entries) */
+function splitWho(e){var s=e.split;if(!s)return [];return s.who?s.who.slice():[0,1]}
+/* who a payment went to; payments before v0.5 have no "to" and went to the other of two people */
+function payTo(e){return e.to!=null?e.to:1-e.payer}
+function needN(list){var m=1;list.forEach(function(e){m=Math.max(m,e.payer);if(e.kind==='payment')m=Math.max(m,payTo(e));else splitWho(e).forEach(function(i){m=Math.max(m,i)})});return m+1}
+function shares(e,n){
+  n=Math.max(n||0,needN([e]));var r=zeros(n);var s=e.split;if(!s)return r;
+  if(s.mode==='eq')return splitEq(e.base,s.who,n);
+  var w=s.who||[0,1];var p=s.mode==='exact'?splitExact(e.base,e.amount,s.a):splitPct(e.base,s.a);
+  r[w[0]]+=p[0];r[w[1]]+=p[1];return r;
+}
+function calc(list,n){
+  n=Math.max(n||2,needN(list));
+  var r={n:n,paid:zeros(n),share:zeros(n),back:zeros(n),recv:zeros(n),net:zeros(n),total:0,nExp:0,nPay:0};
   list.forEach(function(e){
-    if(e.kind==='payment'){r.back[e.payer]+=e.base;r.recv[1-e.payer]+=e.base;r.nPay++}
-    else{r.paid[e.payer]+=e.base;var s=shares(e);r.share[0]+=s[0];r.share[1]+=s[1];r.total+=e.base;r.nExp++}
+    if(e.kind==='payment'){r.back[e.payer]+=e.base;r.recv[payTo(e)]+=e.base;r.nPay++}
+    else{r.paid[e.payer]+=e.base;var s=shares(e,n);for(var i=0;i<n;i++)r.share[i]+=s[i];r.total+=e.base;r.nExp++}
   });
-  for(var i=0;i<2;i++)r.net[i]=r.paid[i]-r.share[i]+r.back[i]-r.recv[i];
+  for(var i=0;i<n;i++)r.net[i]=r.paid[i]-r.share[i]+r.back[i]-r.recv[i];
+  r.transfers=settle(r.net);
   return r;
+}
+/* Who pays whom to square up: whoever owes most pays whoever is owed most, until everyone is even.
+   At most one payment fewer than the number of people. */
+function settle(net){
+  var cr=[],db=[];net.forEach(function(v,i){if(v>0)cr.push({i:i,v:v});else if(v<0)db.push({i:i,v:-v})});
+  function by(a,b){return b.v-a.v||a.i-b.i}
+  var out=[];
+  while(cr.length&&db.length){cr.sort(by);db.sort(by);var c=cr[0],d=db[0],m=Math.min(c.v,d.v);out.push({from:d.i,to:c.i,amt:m});c.v-=m;d.v-=m;if(!c.v)cr.shift();if(!d.v)db.shift()}
+  return out;
 }
 function rateFor(t,code){return code==='HKD'?null:(t.rates&&t.rates[code])||DEFAULT_RATES[code]}
 function rateText(code,rate){
@@ -570,10 +649,14 @@ function render(){
   if(t)renderTab(t);
   renderSync();
 }
+/* ring segments: one per person on each ring, made once */
+(function(){var h='';for(var k=0;k<2;k++)for(var i=0;i<MAXP;i++)h+='<circle class="seg" id="'+(k?'i':'o')+i+'" cx="120" cy="120" r="'+(k?R2:R1)+'" stroke-width="'+(k?8:22)+'" style="stroke:var(--p'+i+');stroke-dasharray:0 '+(k?C2:C1)+'"/>';$('#ring-g').innerHTML=h})();
+function eqText(t,hk){if(!t.defCur||t.defCur==='HKD')return '';var eq=fromBase(hk,t.defCur,rateFor(t,t.defCur));if(t.defCur==='IDR')eq=Math.round(eq/1000)*1000;return '≈ '+fmt(eq,t.defCur)}
 function renderTab(t){
   var root=document.documentElement;
-  root.style.setProperty('--p0',t.people[0].colour);root.style.setProperty('--p1',t.people[1].colour);
-  var list=tabEntries(t);var c=calc(list);
+  t.people.forEach(function(p,i){root.style.setProperty('--p'+i,p.colour)});
+  var N=t.people.length;
+  var list=tabEntries(t);var c=calc(list,N);
   $('#tab-title').textContent=t.name;
   /* meta line */
   var bits=[];
@@ -583,23 +666,27 @@ function renderTab(t){
   $('#tab-meta').innerHTML=bits.join('');
   $('#settled-note').hidden=!t.settled;
 
-  /* ring */
-  var T=c.total;var p0=T?c.paid[0]/T:0;var s0=T?c.share[0]/T:0;
-  setSeg($('#o0'),C1,0,T?p0:0);setSeg($('#o1'),C1,p0,T?1-p0:0);
-  setSeg($('#i0'),C2,0,T?s0:0);setSeg($('#i1'),C2,s0,T?1-s0:0);
-  var l,n,s='',zero=false;var net0=c.net[0];
-  if(!c.nExp&&!c.nPay){l='No spending yet';n=fmt(0,'HKD');zero=true;s=''}
-  else if(net0===0){l='All square';n=fmt(0,'HKD');zero=true}
-  else{var debtor=net0>0?1:0;l=pname(t,debtor)+' owes '+pname(t,1-debtor);n=fmt(Math.abs(net0),'HKD');
-    if(t.defCur&&t.defCur!=='HKD'){var r=rateFor(t,t.defCur);var eq=fromBase(Math.abs(net0),t.defCur,r);if(t.defCur==='IDR')eq=Math.round(eq/1000)*1000;s='≈ '+fmt(eq,t.defCur)}}
+  /* ring: outer = who paid, inner = whose share, one segment per person */
+  var T=c.total,po=0,pi=0;
+  for(var i=0;i<MAXP;i++){
+    var fo=i<N&&T?c.paid[i]/T:0,fi=i<N&&T?c.share[i]/T:0;
+    setSeg($('#o'+i),C1,po,fo);setSeg($('#i'+i),C2,pi,fi);po+=fo;pi+=fi;
+  }
+  /* centre: one payment squares the tab → "X owes Y"; more than one → the total, with the payments listed below */
+  var tr=c.transfers,l,n,s='',zero=false;
+  if(!c.nExp&&!c.nPay){l='No spending yet';n=fmt(0,'HKD');zero=true}
+  else if(!tr.length){l='All square';n=fmt(0,'HKD');zero=true}
+  else if(tr.length===1){l=pname(t,tr[0].from)+' owes '+pname(t,tr[0].to);n=fmt(tr[0].amt,'HKD');s=eqText(t,tr[0].amt)}
+  else{l='Spent together';n=fmt(T,'HKD',{short:true});s=tr.length+' payments to settle'}
   $('#rc-l').textContent=l;var rn=$('#rc-n');rn.textContent=n;rn.classList.toggle('zero',zero);
   rn.style.fontSize=n.length>12?'21px':n.length>10?'25px':'';
-  $('#rc-s').textContent=s;
-  $('#ring-t').textContent=T?(pname(t,0)+' paid '+fmt(c.paid[0],'HKD')+' and '+pname(t,1)+' paid '+fmt(c.paid[1],'HKD')+' of '+fmt(T,'HKD')+'. '+l+(net0?' '+n:'')+'.'):'No spending yet.';
+  $('#rc-s').textContent=s;$('#rc-s').classList.toggle('txt',tr.length>1);
+  $('#ring-t').textContent=T?(t.people.map(function(p,i){return p.name+' paid '+fmt(c.paid[i],'HKD')}).join(', ')+' of '+fmt(T,'HKD')+'. '+l+(tr.length===1?' '+n:'')+'.'):'No spending yet.';
 
-  /* tiles */
-  var mx=Math.max(c.paid[0],c.paid[1],c.share[0],c.share[1],1);var hasPay=c.nPay>0;
-  $('#tiles').innerHTML=[0,1].map(function(i){
+  /* people: two tiles for a pair, a list for a group */
+  var mx=Math.max.apply(null,c.paid.concat(c.share,[1]));var hasPay=c.nPay>0;
+  var tiles=$('#tiles');tiles.classList.toggle('as-list',N>2);
+  if(N===2)tiles.innerHTML=[0,1].map(function(i){
     var net=c.net[i];var lab=net>0?'Gets back':net<0?'Owes':'Even';
     return '<div class="ptile"><div class="ptile-h"><span class="sw" style="background:var(--p'+i+')"></span><h4>'+esc(pname(t,i))+'</h4></div>'+
       '<div class="kv"><span>Paid</span><span class="mono">'+fmt(c.paid[i],'HKD')+'</span></div>'+
@@ -610,22 +697,46 @@ function renderTab(t){
       (hasPay&&c.recv[i]?'<div class="kv"><span>Received</span><span class="mono">'+fmt(c.recv[i],'HKD')+'</span></div>':'')+
       '<div class="net"><span>'+lab+'</span><span class="mono">'+fmt(Math.abs(net),'HKD')+'</span></div></div>';
   }).join('');
+  else tiles.innerHTML='<ul class="plist">'+t.people.map(function(p,i){
+    var net=c.net[i];var lab=net>0?'gets back':net<0?'owes':'even';
+    var extra=(hasPay&&c.back[i]?' · paid back '+fmt(c.back[i],'HKD',{short:true}):'')+(hasPay&&c.recv[i]?' · received '+fmt(c.recv[i],'HKD',{short:true}):'');
+    return '<li><span class="sw" style="background:var(--p'+i+')"></span><span class="pl-m"><span class="pl-n">'+esc(p.name)+'</span><span class="pl-s">Paid <span class="mono">'+fmt(c.paid[i],'HKD',{short:true})+'</span> · share <span class="mono">'+fmt(c.share[i],'HKD',{short:true})+'</span>'+extra+'</span></span>'+
+      '<span class="pl-r"><span class="lab">'+lab+'</span><span class="mono'+(net?'':' zero')+'">'+fmt(Math.abs(net),'HKD')+'</span></span>'+
+      '<span class="pl-bars" aria-hidden="true"><span class="b2"><span style="width:'+(c.paid[i]/mx*100).toFixed(1)+'%;background:var(--p'+i+')"></span></span><span class="b2 sh"><span style="width:'+(c.share[i]/mx*100).toFixed(1)+'%"></span></span></span></li>';
+  }).join('')+'</ul><p class="vkey pl-key"><span>Bars: paid in each person’s colour, share in grey</span></p>';
+
+  /* settle up (groups): the fewest payments that square everyone; tap one to record it */
+  var st=$('#settle');st.hidden=!(N>2&&tr.length);
+  if(!st.hidden)st.innerHTML='<div class="settle-h"><span>Settle up</span><span class="caption mono">'+tr.length+(tr.length===1?' payment':' payments')+'</span></div><ul class="rows">'+tr.map(function(x){
+    return '<li><button class="srow" data-from="'+x.from+'" data-to="'+x.to+'" data-amt="'+x.amt+'"'+(t.settled?' disabled':'')+' aria-label="'+esc(pname(t,x.from))+' pays '+esc(pname(t,x.to))+' '+fmt(x.amt,'HKD')+(t.settled?'':'. Tap to record it')+'">'+
+      '<span class="who"><span class="sw" style="background:var(--p'+x.from+')"></span><span class="nm">'+esc(pname(t,x.from))+'</span>'+icon('arrow-right','sm')+'<span class="sw" style="background:var(--p'+x.to+')"></span><span class="nm">'+esc(pname(t,x.to))+'</span></span><span class="mono">'+fmt(x.amt,'HKD')+'</span></button></li>';
+  }).join('')+'</ul>'+(t.settled?'':'<p class="pnote">Tap a payment once it is made to record it.</p>');
   var days=t.start?Math.max(1,Math.min(daysBetween(t.start,t.end&&todayISO()>t.end?t.end:todayISO())+1,t.end?daysBetween(t.start,t.end)+1:9999)):1;
   $('#total-line').innerHTML=c.nExp?'<span>Spent together</span><span class="mono">'+fmt(T,'HKD')+(days>1&&todayISO()>=t.start?' · '+fmt(Math.round(T/days),'HKD',{short:true})+'/day':'')+'</span>':'';
 
   /* lower section */
   renderLower(t,list);
 }
+function joinNames(t,who){var a=who.map(function(i){return pname(t,i)});return a.length<2?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.length-1]}
 function splitText(t,e){
-  if(!e.split)return '';
-  if(e.split.mode==='exact')return 'exact amounts';
-  var a=e.split.a;if(a===50)return 'half each';if(a===100)return 'for '+pname(t,0);if(a===0)return 'for '+pname(t,1);
-  return pname(t,0)+' '+a+'% · '+pname(t,1)+' '+(100-a)+'%';
+  var s=e.split;if(!s)return '';var N=t.people.length;
+  if(s.mode==='exact')return 'exact amounts';
+  if(s.mode==='eq'){var w=s.who,k=w.length;
+    if(k===1)return 'for '+pname(t,w[0]);
+    if(k===N)return N===2?'half each':'shared by all '+N;
+    if(k===2)return joinNames(t,w)+', half each';
+    if(k===3)return 'shared by '+joinNames(t,w);
+    return 'shared by '+k+' of '+N;
+  }
+  var a=s.a,p=s.who||[0,1];
+  if(a===100)return 'for '+pname(t,p[0]);if(a===0)return 'for '+pname(t,p[1]);
+  if(a===50)return N===2?'half each':joinNames(t,p)+', half each';
+  return pname(t,p[0])+' '+a+'% · '+pname(t,p[1])+' '+(100-a)+'%';
 }
 function rowHTML(t,e){
   var p=t.people[e.payer];var dis=t.settled?' disabled':'';
   var av,title,sub;
-  if(e.kind==='payment'){av='<span class="av pay">'+icon('arrow-right','sm')+'</span>';title=e.desc||(pname(t,e.payer)+' paid '+pname(t,1-e.payer)+' back');sub=esc(pname(t,e.payer))+' → '+esc(pname(t,1-e.payer))}
+  if(e.kind==='payment'){var to=payTo(e);av='<span class="av pay">'+icon('arrow-right','sm')+'</span>';title=e.desc||(pname(t,e.payer)+' paid '+pname(t,to)+' back');sub=esc(pname(t,e.payer))+' → '+esc(pname(t,to))}
   else{av='<span class="av" style="background:'+esc(p.colour)+';color:'+onColour(p.colour)+'">'+esc(p.name.charAt(0).toUpperCase())+'</span>';title=e.desc||'Expense';sub=esc(p.name)+' paid · '+esc(splitText(t,e))}
   return '<button class="rowb" data-id="'+esc(e.id)+'"'+dis+' aria-label="'+esc(title)+', '+esc(fmt(e.amount,e.cur))+'">'+av+
     '<span class="rb-m"><span class="rb-t">'+esc(title)+'</span><span class="rb-s">'+sub+'</span></span>'+
@@ -646,7 +757,7 @@ S.view=lsGet('splitedb:view')||'entries';if(['entries','cal','days'].indexOf(S.v
 S.calSel=null;
 var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 function addDays(iso,n){var p=iso.split('-');return new Date(Date.UTC(+p[0],+p[1]-1,+p[2]+n)).toISOString().slice(0,10)}
-function dow(iso){var p=iso.split('-');return (new Date(Date.UTC(+p[0],+p[1]-1,+p[2])).getUTCDay()+6)%7}
+function dow(iso){var p=iso.split('-');return new Date(Date.UTC(+p[0],+p[1]-1,+p[2])).getUTCDay()}   /* weeks start on Sunday (v0.5) */
 function spendOf(list){return list.filter(function(e){return e.kind!=='payment'})}
 function byDate(exp){var by={};exp.forEach(function(e){(by[e.date]=by[e.date]||[]).push(e)});return by}
 function sumBase(arr){return arr.reduce(function(s,e){return s+e.base},0)}
@@ -663,7 +774,7 @@ function tabRange(t,exp){
   return {start:start,end:end};
 }
 function payerFill(e){return 'var(--p'+e.payer+')'}
-function legendHTML(t){return '<p class="vkey"><span><span class="sw" style="background:var(--p0)"></span>'+esc(pname(t,0))+' paid</span><span><span class="sw" style="background:var(--p1)"></span>'+esc(pname(t,1))+' paid</span></p>'}
+function legendHTML(t){return '<p class="vkey">'+t.people.map(function(p,i){return '<span><span class="sw" style="background:var(--p'+i+')"></span>'+esc(p.name)+' paid</span>'}).join('')+'</p>'}
 function shareBtnHTML(){return '<button class="btn btn-ghost share-btn" data-share>'+icon('export')+'Share as picture</button>'}
 
 function renderLower(t,list){
@@ -712,7 +823,7 @@ function renderCal(t,list){
         '<span class="bar" style="width:'+Math.max(4,Math.round(e.base/maxEv*100))+'%;background:'+payerFill(e)+'"></span>'+
         '<span class="sub">'+esc(pname(t,e.payer))+' paid · '+esc(splitText(t,e))+(e.cur!=='HKD'?' · '+fmt(e.base,'HKD'):'')+'</span></button></li>';
     }).join('')+'</ul>':'<div class="led-empty">Nothing spent on this day.</div>');
-  box.innerHTML='<div class="cal-wd"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div><div class="cal-grid">'+cells.join('')+'</div>'+det+legendHTML(t)+shareBtnHTML();
+  box.innerHTML='<div class="cal-wd" aria-hidden="true"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div><div class="cal-grid">'+cells.join('')+'</div>'+det+legendHTML(t)+shareBtnHTML();
 }
 
 function daysToShow(rg,by){var all=daysBetween(rg.start,rg.end)<=31;var ds=[];for(var d=rg.start;d<=rg.end;d=addDays(d,1)){if(all||by[d])ds.push(d)}return ds}
@@ -722,9 +833,9 @@ function renderDays(t,list){
   var by=byDate(exp);var ds=daysToShow(rg,by);
   var maxDay=Math.max.apply(null,ds.map(function(d){return sumBase(by[d]||[])}).concat([1]));
   box.innerHTML='<ul class="rows">'+ds.map(function(d){
-    var ev=by[d]||[];var pb=[0,0];ev.forEach(function(e){pb[e.payer]+=e.base});var tt=pb[0]+pb[1];
+    var ev=by[d]||[];var pb=zeros(t.people.length);ev.forEach(function(e){pb[e.payer]+=e.base});var tt=sumBase(ev);
     return '<li><button class="drow" data-d="'+d+'" aria-label="'+dayName(d)+' '+dmy(d)+', '+fmt(tt,'HKD',{short:true})+'"><span class="dl"><span class="wd">'+dayName(d)+(ev.length?' · '+ev.length:'')+'</span><span class="mono">'+dmy(d).slice(0,5)+'</span></span>'+
-      '<span class="dbar"><span style="width:'+(tt?Math.max(3,Math.round(tt/maxDay*100)):0)+'%">'+(pb[0]?'<i style="flex:'+pb[0]+';background:var(--p0)"></i>':'')+(pb[1]?'<i style="flex:'+pb[1]+';background:var(--p1)"></i>':'')+'</span></span>'+
+      '<span class="dbar"><span style="width:'+(tt?Math.max(3,Math.round(tt/maxDay*100)):0)+'%">'+pb.map(function(v,i){return v?'<i style="flex:'+v+';background:var(--p'+i+')"></i>':''}).join('')+'</span></span>'+
       '<span class="mono amt">'+(tt?fmt(tt,'HKD',{short:true}):'–')+'</span></button></li>';
   }).join('')+'</ul>'+legendHTML(t)+shareBtnHTML();
 }
@@ -733,15 +844,17 @@ function renderDays(t,list){
 function rr(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
 function fitText(g,s,w){if(g.measureText(s).width<=w)return s;while(s.length>1&&g.measureText(s+'…').width>w)s=s.slice(0,-1);return s+'…'}
 function makeShareImage(t){
-  var list=tabEntries(t),exp=spendOf(list),c=calc(list);
+  var N=t.people.length,list=tabEntries(t),exp=spendOf(list),c=calc(list,N),tr=c.transfers;
   var rg=tabRange(t,exp)||{start:t.start||todayISO(),end:t.end||t.start||todayISO()};
   var by=byDate(exp),ds=daysToShow(rg,by);if(ds.length>40)ds=ds.slice(-40);
   var maxDay=Math.max.apply(null,ds.map(function(d){return sumBase(by[d]||[])}).concat([1]));
-  var W=1080,M=48,X=M+56,R=W-M-56,rowH=60,H=600+ds.length*rowH+190;
+  /* a pair keeps the one-line legend; a group gets two columns, and a list of payments when more than one is needed */
+  var keyRows=N===2?1:Math.ceil(N/2),keyH=46,payH=52;
+  var W=1080,M=48,X=M+56,R=W-M-56,rowH=60,H=600+ds.length*rowH+190+(keyRows-1)*keyH+(tr.length>1?tr.length*payH+12:0);
   var cv=document.createElement('canvas');cv.width=W;cv.height=H;var g=cv.getContext('2d');
   var cs=getComputedStyle(document.documentElement);function tok(n,f){return (cs.getPropertyValue(n)||'').trim()||f}
   var BG=tok('--bg','#050a0e'),SF=tok('--surface','#091622'),TX=tok('--text','#eaf4ff'),MU=tok('--muted-text','#6a90b8'),BD=tok('--border','#16293d');
-  var col=[t.people[0].colour,t.people[1].colour];
+  var col=t.people.map(function(p){return p.colour});
   var SERIF='"EB Garamond", Georgia, serif',MONO='"Fira Mono", Menlo, monospace',SANS='"Source Sans 3", -apple-system, sans-serif';
   var ready=document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve();
   return ready.then(function(){
@@ -754,22 +867,44 @@ function makeShareImage(t){
     y+=52;g.fillStyle=MU;g.font='28px '+MONO;g.fillText(dmy(rg.start)+' – '+dmy(rg.end)+' · '+n+(n===1?' day':' days'),X,y);
     y+=96;g.fillStyle=TX;g.font='600 66px '+MONO;g.fillText(fmt(c.total,'HKD',{short:true}),X,y);
     y+=62;
-    [0,1].forEach(function(i){var x=X+i*((R-X)/2);g.fillStyle=col[i];rr(g,x,y-22,24,24,4);g.fill();g.fillStyle=TX;g.font='30px '+SANS;var lab=pname(t,i)+' paid';g.fillText(lab,x+38,y);var lw=g.measureText(lab).width;g.font='30px '+MONO;g.fillText(fmt(c.paid[i],'HKD',{short:true}),x+38+lw+14,y)});
+    var colW=(R-X)/2;
+    t.people.forEach(function(p,i){
+      var x=X+(i%2)*colW,yy=y+(N===2?0:Math.floor(i/2)*keyH);
+      g.fillStyle=col[i];rr(g,x,yy-22,24,24,4);g.fill();g.fillStyle=TX;
+      if(N===2){g.font='30px '+SANS;var lab=p.name+' paid';g.fillText(lab,x+38,yy);var lw=g.measureText(lab).width;g.font='30px '+MONO;g.fillText(fmt(c.paid[i],'HKD',{short:true}),x+38+lw+14,yy);return}
+      var amt=fmt(c.paid[i],'HKD',{short:true});g.font='28px '+MONO;var aw=g.measureText(amt).width;var right=i%2?R:x+colW-32;
+      g.fillText(amt,right-aw,yy);g.font='28px '+SANS;var room=right-aw-(x+38)-16;var nm=p.name+' paid';g.fillText(g.measureText(nm).width<=room?nm:fitText(g,p.name,room),x+38,yy);
+    });
+    y+=(keyRows-1)*keyH;
     y+=40;g.fillStyle=BD;g.fillRect(X,y,R-X,2);y+=50;
     var bx=X+190,bw=R-X-190-210;
     ds.forEach(function(d){
-      var ev=by[d]||[];var pb=[0,0];ev.forEach(function(e){pb[e.payer]+=e.base});var tt=pb[0]+pb[1];
+      var ev=by[d]||[];var pb=zeros(N);ev.forEach(function(e){pb[e.payer]+=e.base});var tt=sumBase(ev);
       g.fillStyle=MU;g.font='26px '+MONO;g.fillText(dayName(d)+' '+dmy(d).slice(0,5),X,y);
       g.fillStyle=BD;rr(g,bx,y-24,bw,26,6);g.fill();
-      var w=tt?Math.max(6,tt/maxDay*bw):0,x=bx;
-      [0,1].forEach(function(i){if(!pb[i])return;var sw=w*pb[i]/tt;g.fillStyle=col[i];g.fillRect(x,y-24,Math.max(0,sw-(i===0&&pb[1]?2:0)),26);x+=sw});
+      var w=tt?Math.max(6,tt/maxDay*bw):0,x=bx,lastI=-1;pb.forEach(function(v,i){if(v)lastI=i});
+      pb.forEach(function(v,i){if(!v)return;var sw=w*v/tt;g.fillStyle=col[i];g.fillRect(x,y-24,Math.max(0,sw-(i<lastI?2:0)),26);x+=sw});
       g.fillStyle=tt?TX:MU;g.font='28px '+MONO;g.textAlign='right';g.fillText(tt?fmt(tt,'HKD',{short:true}):'–',R,y);g.textAlign='left';
       y+=rowH;
     });
     y+=6;g.fillStyle=BD;g.fillRect(X,y-30,R-X,2);y+=40;
-    var net0=c.net[0];var owe=net0===0?'All square':(net0>0?pname(t,1)+' owes '+pname(t,0):pname(t,0)+' owes '+pname(t,1));
-    g.fillStyle=TX;g.font='34px '+SANS;g.fillText(owe,X,y);
-    if(net0){g.font='500 44px '+MONO;g.textAlign='right';g.fillText(fmt(Math.abs(net0),'HKD'),R,y);g.textAlign='left'}
+    if(tr.length<=1){
+      var owe=!tr.length?'All square':pname(t,tr[0].from)+' owes '+pname(t,tr[0].to);
+      g.fillStyle=TX;g.font='500 44px '+MONO;var ow=tr.length?g.measureText(fmt(tr[0].amt,'HKD')).width:0;
+      g.font='34px '+SANS;g.fillText(fitText(g,owe,R-X-ow-24),X,y);
+      if(tr.length){g.font='500 44px '+MONO;g.textAlign='right';g.fillText(fmt(tr[0].amt,'HKD'),R,y);g.textAlign='left'}
+    }else{
+      g.fillStyle=TX;g.font='34px '+SANS;g.fillText('To settle up',X,y);
+      g.fillStyle=MU;g.font='26px '+MONO;g.textAlign='right';g.fillText(tr.length+' payments',R,y);g.textAlign='left';
+      y+=12;
+      tr.forEach(function(p){
+        y+=payH;g.font='30px '+MONO;var am=fmt(p.amt,'HKD');var aw=g.measureText(am).width;g.fillStyle=TX;g.textAlign='right';g.fillText(am,R,y);g.textAlign='left';
+        var half=(R-X-aw-24-60)/2,x=X;g.font='30px '+SANS;
+        g.fillStyle=col[p.from];rr(g,x,y-22,22,22,4);g.fill();g.fillStyle=TX;var a=fitText(g,pname(t,p.from),half-34);g.fillText(a,x+34,y);x+=34+g.measureText(a).width+16;
+        g.fillStyle=MU;g.fillText('→',x,y);x+=g.measureText('→').width+16;
+        g.fillStyle=col[p.to];rr(g,x,y-22,22,22,4);g.fill();g.fillStyle=TX;g.fillText(fitText(g,pname(t,p.to),half-34),x+34,y);
+      });
+    }
     g.fillStyle=MU;g.font='24px '+SANS;g.fillText('Made with Splitedb',X,H-M-36);
     return new Promise(function(res){cv.toBlob(function(b){res(b)},'image/png')});
   });
@@ -824,20 +959,27 @@ function vv(){var v=window.visualViewport;if(!v)return;var kb=Math.max(0,window.
 if(window.visualViewport){window.visualViewport.addEventListener('resize',vv);window.visualViewport.addEventListener('scroll',vv)}
 
 /* ── entry sheet (add / edit) ──────────────────────────── */
-/* v0.3: one screen on a phone, blinking caret on the amount, delete key repeats when held,
-   percentage split only (older exact-amount entries keep their split unless you change it). */
-function entrySheet(e){
+/* v0.3: one screen on a phone, blinking caret on the amount, delete key repeats when held.
+   v0.5: any number of people. "Shared by all" is the default split; tap a name to leave them out.
+   With exactly two people picked, the drag bar splits unevenly. Older exact-amount entries keep their split unless changed.
+   pre (optional): {kind:'payment',payer,to,base} opens a ready-filled repayment, from the settle-up list. */
+function entrySheet(e,pre){
   var t=currentTab();if(!t)return;
-  var isEdit=!!e;var L=last(t);
+  var isEdit=!!e;var L=last(t);var N=t.people.length;var many=N>2;
+  var ALL=t.people.map(function(_,i){return i});
   var curs=CUR_ORDER.filter(function(k){return t.currencies.indexOf(k)>=0});
   var orig=isEdit&&e.split?e.split:null;
   var startA=50;
-  if(orig)startA=orig.mode==='exact'?(e.amount?Math.round(orig.a/e.amount*100):50):orig.a;
-  var d=isEdit?{kind:e.kind,cur:e.cur,desc:e.desc||'',payer:e.payer,a:startA,date:e.date}
-    :{kind:'expense',cur:curs.indexOf(L.cur)>=0?L.cur:(t.defCur||'HKD'),desc:'',payer:L.payer===1?1:0,a:50,date:todayISO()};
+  if(orig&&orig.mode!=='eq')startA=orig.mode==='exact'?(e.amount?Math.round(orig.a/e.amount*100):50):orig.a;
+  var lp=(L.payer>=0&&L.payer<N)?L.payer:0;
+  var d=isEdit?{kind:e.kind,cur:e.cur,desc:e.desc||'',payer:e.payer,to:e.kind==='payment'?payTo(e):(e.payer?0:1),who:orig?splitWho(e):ALL.slice(),a:startA,date:e.date}
+    :{kind:'expense',cur:curs.indexOf(L.cur)>=0?L.cur:(t.defCur||'HKD'),desc:'',payer:lp,to:lp?0:1,who:ALL.slice(),a:50,date:todayISO()};
+  if(pre&&!isEdit){d.kind=pre.kind||'payment';if(pre.payer!=null)d.payer=pre.payer;if(pre.to!=null)d.to=pre.to}
+  if(d.who.length!==2)d.a=50;
   var splitTouched=false,prefill=null;
   var descs=[];tabEntries(t).sort(function(a,b){return (b.createdAt||0)-(a.createdAt||0)}).forEach(function(x){if(x.desc&&descs.indexOf(x.desc)<0&&descs.length<30)descs.push(x.desc)});
-  var P=[0,1].map(function(i){return t.people[i]});
+  var P=t.people;
+  function who(i){return '<span class="sw" style="background:var(--p'+i+')"></span><span>'+esc(P[i].name)+'</span>'}
   var amtHTML=TOUCH
     ?'<input id="f-amt" class="sr-only" tabindex="-1" readonly aria-hidden="true">'+
      '<div class="amt amt-disp" id="f-amtd" role="textbox" aria-label="Amount" aria-readonly="true" tabindex="0"><span id="f-amtt"></span><span class="caret" aria-hidden="true"></span><span class="ph" id="f-amtph">0</span></div>'
@@ -849,17 +991,21 @@ function entrySheet(e){
     '<p class="conv" id="f-conv"></p><p class="error-msg" id="f-amt-err" hidden></p></div>'+
     '<div class="row2"><div class="field"><label for="f-desc">What for</label><input id="f-desc" class="input" placeholder="Dinner at Jimbaran" list="f-dl" autocomplete="off" enterkeyhint="done" maxlength="60"><datalist id="f-dl">'+descs.map(function(x){return '<option value="'+esc(x)+'"></option>'}).join('')+'</datalist></div>'+
     '<div class="field"><label for="f-date">Date</label><input id="f-date" type="date" class="input"></div></div>'+
-    '<div class="irow"><span class="flabel" id="f-pl">Paid by</span><div class="pp" role="radiogroup" aria-labelledby="f-pl">'+
-      P.map(function(p,i){return '<button class="pbtn" role="radio" data-p="'+i+'"><span class="sw" style="background:var(--p'+i+')"></span><span>'+esc(p.name)+'</span></button>'}).join('')+
-    '</div></div><p class="pnote" id="f-pnote" hidden></p>'+
-    '<div class="split-block" id="f-split"><div class="irow"><span class="flabel">Split</span><div class="chips" role="group" aria-label="Split presets">'+
-        '<button class="chip" data-pre="50">Half each</button>'+
-        '<button class="chip" data-pre="100">All '+esc(P[0].name)+'</button>'+
-        '<button class="chip" data-pre="0">All '+esc(P[1].name)+'</button>'+
+    '<div class="irow'+(many?' multi':'')+'"><span class="flabel" id="f-pl">Paid by</span><div class="pp'+(many?' many':'')+'" role="radiogroup" aria-labelledby="f-pl">'+
+      P.map(function(p,i){return '<button class="pbtn" role="radio" data-p="'+i+'">'+who(i)+'</button>'}).join('')+
+    '</div></div>'+
+    (many?'<div class="irow multi" id="f-torow" hidden><span class="flabel" id="f-tl">To</span><div class="pp many" role="radiogroup" aria-labelledby="f-tl">'+
+      P.map(function(p,i){return '<button class="pbtn" role="radio" data-to="'+i+'">'+who(i)+'</button>'}).join('')+'</div></div>':'')+
+    '<p class="pnote" id="f-pnote" hidden></p>'+
+    '<div class="split-block" id="f-split"><div class="irow'+(many?' multi':'')+'"><span class="flabel" id="f-sl">Split</span><div class="chips" role="group" aria-labelledby="f-sl">'+
+        '<button class="chip" id="f-all">Shared by all</button>'+
+        P.map(function(p,i){return '<button class="chip pt" data-w="'+i+'" aria-label="'+esc(p.name)+' shares this">'+who(i)+'</button>'}).join('')+
       '</div></div>'+
-      '<div class="sbar" id="f-sbar"><div class="st"><span class="s0" id="f-s0"></span><span class="s1" id="f-s1"></span></div><span class="hd" id="f-hd"></span>'+
-        '<input type="range" id="f-a" min="0" max="100" step="1" aria-label="'+esc(P[0].name)+'’s share, percent"></div>'+
-      '<div class="sread"><span><span class="nm">'+esc(P[0].name)+' <span id="f-pc0" class="mono"></span></span><span class="mono" id="f-v0"></span></span><span><span class="nm">'+esc(P[1].name)+' <span id="f-pc1" class="mono"></span></span><span class="mono" id="f-v1"></span></span></div>'+
+      '<p class="eqr" id="f-eqr" aria-live="polite"></p>'+
+      '<div id="f-pair"><div class="sbar" id="f-sbar"><div class="st"><span class="s0" id="f-s0"></span><span class="s1" id="f-s1"></span></div><span class="hd" id="f-hd"></span>'+
+        '<input type="range" id="f-a" min="0" max="100" step="1"></div>'+
+      '<div class="sread"><span><span class="nm"><span id="f-n0"></span> <span id="f-pc0" class="mono"></span></span><span class="mono" id="f-v0"></span></span><span><span class="nm"><span id="f-n1"></span> <span id="f-pc1" class="mono"></span></span><span class="mono" id="f-v1"></span></span></div></div>'+
+      '<p class="error-msg" id="f-split-err" hidden></p>'+
     '</div>'+
     (isEdit?'<div class="sheet-actions"><button class="btn btn-ghost danger" id="f-del">'+icon('trash')+'Delete</button></div>':'');
   var foot=(TOUCH?'<div class="kp" id="f-kp" role="group" aria-label="Number pad">'+
@@ -878,24 +1024,41 @@ function entrySheet(e){
     function showAmt(){if(!TOUCH)return;var v=amt.value;$('#f-amtt',sh).textContent=v;$('#f-amtph',sh).hidden=!!v}
     function upd(){
       var pay=d.kind==='payment';
+      if(d.to===d.payer)d.to=d.payer?0:1;
       $$('#f-kind button',sh).forEach(function(b){b.classList.toggle('active',b.dataset.k===d.kind)});
       $$('#f-cur button',sh).forEach(function(b){b.classList.toggle('active',b.dataset.c===d.cur)});
       $('#f-sym',sh).textContent=CUR[d.cur].sym;kpKeys();showAmt();
-      $$('.pbtn',sh).forEach(function(b){b.setAttribute('aria-checked',String(+b.dataset.p===d.payer))});
-      $('#f-pl',sh).textContent=pay?'Paid back':'Paid by';
-      var pn=$('#f-pnote',sh);pn.hidden=!pay;if(pay)pn.textContent=P[d.payer].name+' pays '+P[1-d.payer].name+'.';
+      $$('.pbtn[data-p]',sh).forEach(function(b){b.setAttribute('aria-checked',String(+b.dataset.p===d.payer))});
+      $$('.pbtn[data-to]',sh).forEach(function(b){var i=+b.dataset.to;b.setAttribute('aria-checked',String(i===d.to));b.disabled=i===d.payer});
+      $('#f-pl',sh).textContent=pay?(many?'From':'Paid back'):'Paid by';
+      var tr=$('#f-torow',sh);if(tr)tr.hidden=!pay;
+      var pn=$('#f-pnote',sh);pn.hidden=!pay||many;if(pay)pn.textContent=P[d.payer].name+' pays '+P[d.to].name+'.';
       $('#f-split',sh).hidden=pay;
       $('#f-save',sh).textContent=isEdit?'Save changes':(pay?'Record payment':'Add expense');
       var a=amount();var r=isEdit&&e.cur===d.cur&&e.rate?e.rate:rateFor(t,d.cur);
       var conv=$('#f-conv',sh);
       if(a.minor)conv.textContent=d.cur==='HKD'?'':'= '+fmt(toBase(a.minor,d.cur,r),'HKD')+'  at '+rateText(d.cur,r);
       else conv.textContent=d.cur==='HKD'?'':rateText(d.cur,r);
-      $$('.chip',sh).forEach(function(c){c.setAttribute('aria-pressed',String(+c.dataset.pre===d.a))});
-      $('#f-s0',sh).style.width=d.a+'%';$('#f-s0',sh).style.display=d.a?'':'none';$('#f-s1',sh).style.display=d.a<100?'':'none';
-      $('#f-hd',sh).style.left='calc(4px + (100% - 8px) * '+(d.a/100)+')';
-      $('#f-pc0',sh).textContent=d.a+'%';$('#f-pc1',sh).textContent=(100-d.a)+'%';
-      var sp=a.minor?splitPct(a.minor,d.a):[0,0];
-      $('#f-v0',sh).textContent=fmt(sp[0],d.cur);$('#f-v1',sh).textContent=fmt(sp[1],d.cur);
+      /* split */
+      var k=d.who.length,m=a.minor||0;
+      $('#f-all',sh).setAttribute('aria-pressed',String(k===N&&(k!==2||d.a===50)));
+      $$('.chip.pt',sh).forEach(function(c){c.setAttribute('aria-pressed',String(d.who.indexOf(+c.dataset.w)>=0))});
+      var pair=k===2,eqr=$('#f-eqr',sh);
+      $('#f-pair',sh).hidden=!pair;eqr.hidden=pair;
+      if(!k)eqr.textContent='Tap the people who share this.';
+      else if(k===1)eqr.textContent='For '+P[d.who[0]].name+' only'+(m?' · '+fmt(m,d.cur):'');
+      else if(!pair)eqr.textContent=(m?(m%k?'≈ ':'')+fmt(Math.floor(m/k),d.cur)+' each · ':'')+k+' people'+(k===N?'':' of '+N);
+      if(pair){
+        var i0=d.who[0],i1=d.who[1];
+        $('#f-s0',sh).style.background='var(--p'+i0+')';$('#f-s1',sh).style.background='var(--p'+i1+')';
+        $('#f-s0',sh).style.width=d.a+'%';$('#f-s0',sh).style.display=d.a?'':'none';$('#f-s1',sh).style.display=d.a<100?'':'none';
+        $('#f-hd',sh).style.left='calc(4px + (100% - 8px) * '+(d.a/100)+')';
+        $('#f-a',sh).setAttribute('aria-label',P[i0].name+'’s share, percent');
+        $('#f-n0',sh).textContent=P[i0].name;$('#f-n1',sh).textContent=P[i1].name;
+        $('#f-pc0',sh).textContent=d.a+'%';$('#f-pc1',sh).textContent=(100-d.a)+'%';
+        var sp=m?splitPct(m,d.a):[0,0];
+        $('#f-v0',sh).textContent=fmt(sp[0],d.cur);$('#f-v1',sh).textContent=fmt(sp[1],d.cur);
+      }
     }
     function err(id,msg){var el=$(id,sh);el.hidden=!msg;el.textContent=msg||''}
 
@@ -935,11 +1098,19 @@ function entrySheet(e){
       [$('#f-desc',sh),$('#f-date',sh)].forEach(function(x){x.addEventListener('focus',function(){setT(false)})});
     }
 
+    /* repayments: fill in what the settle-up list says this pair owes */
+    function fillPay(base){var m=fromBase(base,d.cur,rateFor(t,d.cur));if(m>0){amt.value=group(inputStr(m,d.cur));prefill={minor:m,cur:d.cur,base:base}}}
+    function refill(){
+      if(isEdit||d.kind!=='payment')return;
+      if(amt.value&&!(prefill&&prefill.cur===d.cur&&amount().minor===prefill.minor))return;
+      var tr=calc(tabEntries(t),N).transfers.filter(function(x){return x.from===d.payer&&x.to===d.to})[0];
+      if(tr)fillPay(tr.amt);else if(prefill){amt.value='';prefill=null}
+    }
     $$('#f-kind button',sh).forEach(function(b){b.addEventListener('click',function(){
       d.kind=b.dataset.k;
       if(d.kind==='payment'&&!isEdit&&!amt.value){
-        var c=calc(tabEntries(t));var net0=c.net[0];
-        if(net0!==0){d.payer=net0>0?1:0;var r=rateFor(t,d.cur);var m=fromBase(Math.abs(net0),d.cur,r);if(m>0){amt.value=group(inputStr(m,d.cur));prefill={minor:m,cur:d.cur,base:Math.abs(net0)}}}
+        var tr=calc(tabEntries(t),N).transfers;
+        if(tr.length){d.payer=tr[0].from;d.to=tr[0].to;fillPay(tr[0].amt)}
       }
       upd();
     })});
@@ -952,8 +1123,14 @@ function entrySheet(e){
     amt.addEventListener('input',function(){err('#f-amt-err','');upd()});
     amt.addEventListener('keydown',function(ev){if(ev.key==='Enter'){ev.preventDefault();$('#f-desc',sh).focus()}});
     $('#f-desc',sh).addEventListener('keydown',function(ev){if(ev.key==='Enter'){ev.preventDefault();save()}});
-    $$('.pbtn',sh).forEach(function(b){b.addEventListener('click',function(){d.payer=+b.dataset.p;upd()})});
-    $$('.chip',sh).forEach(function(c){c.addEventListener('click',function(){setA(+c.dataset.pre)})});
+    $$('.pbtn[data-p]',sh).forEach(function(b){b.addEventListener('click',function(){d.payer=+b.dataset.p;if(d.to===d.payer)d.to=d.payer?0:1;refill();upd()})});
+    $$('.pbtn[data-to]',sh).forEach(function(b){b.addEventListener('click',function(){if(b.disabled)return;d.to=+b.dataset.to;refill();upd()})});
+    $('#f-all',sh).addEventListener('click',function(){d.who=ALL.slice();d.a=50;splitTouched=true;err('#f-split-err','');upd()});
+    $$('.chip.pt',sh).forEach(function(c){c.addEventListener('click',function(){
+      var i=+c.dataset.w,j=d.who.indexOf(i);
+      if(j>=0)d.who.splice(j,1);else{d.who.push(i);d.who.sort(function(x,y){return x-y})}
+      d.a=50;splitTouched=true;err('#f-split-err','');upd();
+    })});
     var bar=$('#f-sbar',sh);var drag=false;
     function fromX(x){var r=bar.getBoundingClientRect();setA((x-r.left)/r.width*100,true)}
     bar.addEventListener('pointerdown',function(ev){drag=true;try{bar.setPointerCapture(ev.pointerId)}catch(_){}fromX(ev.clientX)});
@@ -974,38 +1151,45 @@ function entrySheet(e){
       if(base<=0){err('#f-amt-err','That amount is below HK$0.01.');return}
       var split=null;
       if(d.kind==='expense'){
+        if(!d.who.length){err('#f-split-err','Pick at least one person to share this.');return}
         /* an older exact-amount split stays as it was unless the split or the amount changed */
         if(orig&&orig.mode==='exact'&&!splitTouched&&a.minor===e.amount&&d.cur===e.cur)split=orig;
-        else split={mode:'pct',a:d.a};
+        else if(d.who.length===2&&d.a!==50)split={mode:'pct',a:d.a,who:d.who.slice()};
+        else split={mode:'eq',who:d.who.slice()};
       }
       var date=$('#f-date',sh).value||todayISO();
       var now=Date.now();
       var rec={id:isEdit?e.id:uid(),tabId:t.id,kind:d.kind,date:date,desc:$('#f-desc',sh).value.trim(),amount:a.minor,cur:d.cur,rate:rate,base:base,payer:d.payer,split:split,createdAt:isEdit?e.createdAt:now,updatedAt:now};
+      if(d.kind==='payment')rec.to=d.to;
       put('entries',rec.id,rec);
-      if(!isEdit)setLast(t,{cur:d.cur,payer:d.kind==='expense'?d.payer:(L.payer||0)});
+      if(!isEdit)setLast(t,{cur:d.cur,payer:d.kind==='expense'?d.payer:lp});
       closeSheet();
       toast((isEdit?'Saved':'Added')+' · '+fmt(a.minor,d.cur));
     }
+    if(pre&&!isEdit&&pre.base)fillPay(pre.base);
     upd();
-    if(!isEdit)focusAmt();else setT(false);
+    if(!isEdit&&!pre)focusAmt();else setT(false);
   },foot);
 }
 
 /* ── tab sheet (new / edit) ────────────────────────────── */
-/* New tabs start with the people from the most recent tab; a first-time user sees You and Friend. */
-function defaultPeople(){var l=tabList();if(l.length)return clone(l[0].people);return [{name:'You',colour:SWATCHES[0][0]},{name:'Friend',colour:SWATCHES[3][0]}]}
+/* New tabs start with the people from the most recent tab; a first-time user sees You and Friend.
+   v0.5: 2 to 10 people, each with their own colour. Someone who is on an entry cannot be removed. */
+function defaultPeople(){var l=tabList();if(l.length)return clone(l[0].people);return [{name:'You',colour:SWATCHES[AUTO_ORDER[0]][0]},{name:'Friend',colour:SWATCHES[AUTO_ORDER[1]][0]}]}
+function entriesWith(t,i){return tabEntries(t).filter(function(e){return e.payer===i||(e.kind==='payment'?payTo(e)===i:splitWho(e).indexOf(i)>=0)}).length}
 function tabSheet(t){
   var isEdit=!!t;
   var d=isEdit?clone(t):{name:'',start:todayISO(),end:'',people:defaultPeople(),currencies:['HKD','USD','IDR'],rates:{USD:DEFAULT_RATES.USD,IDR:DEFAULT_RATES.IDR},defCur:'HKD',settled:false};
   d.rates=d.rates||{};
-  var delArmed=false;
+  d.people=d.people.map(function(p,i){return {name:p.name,colour:p.colour,o:isEdit?i:null}});   /* o = place on the saved tab, for re-pointing entries */
+  var delArmed=false,open=-1;
   var body=
     '<div class="field"><label for="t-name">Name</label><input id="t-name" class="input" placeholder="Bali" maxlength="40" autocomplete="off"><p class="error-msg" id="t-name-err" hidden></p></div>'+
     '<div class="g2"><div class="field"><label for="t-start">Starts</label><input id="t-start" type="date" class="input"></div><div class="field"><label for="t-end">Ends</label><input id="t-end" type="date" class="input"></div></div>'+
     '<p class="error-msg" id="t-date-err" hidden></p>'+
-    '<fieldset class="fs"><legend class="flabel">People</legend>'+
-      [0,1].map(function(i){return '<div class="person-row"><input id="t-p'+i+'" class="input" maxlength="20" autocomplete="off" aria-label="Person '+(i+1)+' name"><div class="swatches" role="radiogroup" aria-label="Colour for person '+(i+1)+'">'+
-        SWATCHES.map(function(s){return '<button class="swb" role="radio" data-i="'+i+'" data-c="'+s[0]+'" aria-label="'+s[1]+'" style="background:'+s[0]+'"></button>'}).join('')+'</div></div>'}).join('')+
+    '<fieldset class="fs"><legend class="flabel">People <span class="mono" id="t-pcount"></span></legend>'+
+      '<div id="t-people"></div>'+
+      '<button type="button" class="btn btn-ghost t-addp" id="t-addp">'+icon('plus')+'Add person</button>'+
       '<p class="error-msg" id="t-p-err" hidden></p>'+
     '</fieldset>'+
     '<fieldset class="fs"><legend class="flabel">Currencies</legend>'+
@@ -1022,31 +1206,79 @@ function tabSheet(t){
 
   openSheet(isEdit?'Tab settings':'New tab',body,function(sh){
     $('#t-name',sh).value=d.name;$('#t-start',sh).value=d.start||'';$('#t-end',sh).value=d.end||'';
-    $('#t-p0',sh).value=d.people[0].name;$('#t-p1',sh).value=d.people[1].name;
     ['USD','IDR'].forEach(function(k){$('#t-c-'+k,sh).checked=d.currencies.indexOf(k)>=0;$('#t-r-'+k,sh).value=String(d.rates[k]||DEFAULT_RATES[k])});
     if(isEdit)$('#t-settled',sh).checked=!!d.settled;
+    function err(id,m){var el=$(id,sh);el.hidden=!m;el.textContent=m||'';return !m}
     function enabled(){return CUR_ORDER.filter(function(k){return k==='HKD'||$('#t-c-'+k,sh).checked})}
+    function readNames(){d.people.forEach(function(p,i){var el=$('#t-p'+i,sh);if(el)p.name=el.value})}
+    function cname(c){var s=SWATCHES.filter(function(x){return x[0]===c})[0];return s?s[1]:'Custom'}
+    function drawPeople(focus){
+      var n=d.people.length;
+      $('#t-people',sh).innerHTML=d.people.map(function(p,i){
+        var row='<div class="pe"><button type="button" class="pe-c" data-i="'+i+'" aria-expanded="'+(open===i)+'" aria-label="Colour for person '+(i+1)+': '+cname(p.colour)+'. Change" style="background:'+esc(p.colour)+'"></button>'+
+          '<input id="t-p'+i+'" class="input" maxlength="20" autocomplete="off" placeholder="Name" aria-label="Person '+(i+1)+' name">'+
+          (n>2?'<button type="button" class="icon-btn pe-x" data-i="'+i+'" aria-label="Remove person '+(i+1)+'">'+icon('x')+'</button>':'')+'</div>';
+        if(open===i)row+='<div class="swatches pe-pal" role="radiogroup" aria-label="Colour for person '+(i+1)+'">'+SWATCHES.map(function(s){
+          var taken=d.people.some(function(q,j){return j!==i&&q.colour===s[0]});
+          return '<button type="button" class="swb" role="radio" data-i="'+i+'" data-c="'+s[0]+'" aria-checked="'+(p.colour===s[0])+'" aria-label="'+s[1]+(taken?', taken':'')+'"'+(taken?' disabled':'')+' style="background:'+s[0]+'"></button>'}).join('')+'</div>';
+        return row;
+      }).join('');
+      d.people.forEach(function(p,i){$('#t-p'+i,sh).value=p.name});
+      $('#t-pcount',sh).textContent=n+' of '+MAXP;
+      $('#t-addp',sh).hidden=n>=MAXP;
+      if(focus!=null){var el=$(focus,sh);if(el)el.focus()}
+    }
+    $('#t-people',sh).addEventListener('click',function(ev){
+      var b=ev.target.closest('button');if(!b||b.disabled)return;var i=+b.dataset.i;
+      readNames();
+      if(b.classList.contains('pe-c')){open=open===i?-1:i;drawPeople(open>=0?'.swb[aria-checked="true"]':'.pe-c[data-i="'+i+'"]');return}
+      if(b.classList.contains('swb')){d.people[i].colour=b.dataset.c;open=-1;drawPeople('.pe-c[data-i="'+i+'"]');return}
+      if(b.classList.contains('pe-x')){
+        var p=d.people[i],r=p.o!=null?entriesWith(t,p.o):0;
+        if(r){err('#t-p-err',(p.name.trim()||'This person')+' is on '+r+(r===1?' entry':' entries')+'. Change or delete '+(r===1?'it':'them')+' first.');return}
+        d.people.splice(i,1);open=-1;err('#t-p-err','');drawPeople();
+      }
+    });
+    $('#t-addp',sh).addEventListener('click',function(){
+      readNames();if(d.people.length>=MAXP)return;
+      var c=AUTO_ORDER.map(function(k){return SWATCHES[k][0]}).filter(function(x){return !d.people.some(function(p){return p.colour===x})})[0]||SWATCHES[0][0];
+      d.people.push({name:'',colour:c,o:null});open=-1;err('#t-p-err','');drawPeople('#t-p'+(d.people.length-1));
+    });
     function upd(){
-      $$('.swb',sh).forEach(function(b){var i=+b.dataset.i;b.setAttribute('aria-checked',String(d.people[i].colour===b.dataset.c));b.disabled=d.people[1-i].colour===b.dataset.c});
       ['USD','IDR'].forEach(function(k){$('#t-r-'+k,sh).disabled=!$('#t-c-'+k,sh).checked});
       var en=enabled();if(en.indexOf(d.defCur)<0)d.defCur='HKD';
       var seg=$('#t-def',sh);seg.innerHTML=en.map(function(k){return '<button data-c="'+k+'" class="'+(k===d.defCur?'active':'')+'">'+CUR[k].sym+'</button>'}).join('');
       $$('button',seg).forEach(function(b){b.addEventListener('click',function(){d.defCur=b.dataset.c;upd()})});
     }
-    $$('.swb',sh).forEach(function(b){b.addEventListener('click',function(){d.people[+b.dataset.i].colour=b.dataset.c;upd()})});
     ['USD','IDR'].forEach(function(k){$('#t-c-'+k,sh).addEventListener('change',upd)});
     $('#t-save',sh).addEventListener('click',function(){
-      var ok=true;function err(id,m){var el=$(id,sh);el.hidden=!m;el.textContent=m||'';if(m)ok=false}
-      var name=$('#t-name',sh).value.trim();err('#t-name-err',name?'':'Name the tab, for example Bali.');
-      var st=$('#t-start',sh).value,en=$('#t-end',sh).value;err('#t-date-err',st&&en&&en<st?'The end date is before the start date.':'');
-      var n0=$('#t-p0',sh).value.trim(),n1=$('#t-p1',sh).value.trim();
-      err('#t-p-err',!n0||!n1?'Give both people a name.':n0.toLowerCase()===n1.toLowerCase()?'Use two different names.':'');
+      readNames();
+      var name=$('#t-name',sh).value.trim();var ok=err('#t-name-err',name?'':'Name the tab, for example Bali.');
+      var st=$('#t-start',sh).value,en=$('#t-end',sh).value;ok=err('#t-date-err',st&&en&&en<st?'The end date is before the start date.':'')&&ok;
+      var names=d.people.map(function(p){return p.name.trim()}),dup='';
+      names.forEach(function(x,i){names.forEach(function(y,j){if(j>i&&x&&x.toLowerCase()===y.toLowerCase())dup=x})});
+      ok=err('#t-p-err',names.some(function(x){return !x})?(d.people.length===2?'Give both people a name.':'Give everyone a name.'):dup?'Two people are called '+dup+'. Use different names.':'')&&ok;
       var rates={};var rerr='';
       ['USD','IDR'].forEach(function(k){var v=parseFloat(String($('#t-r-'+k,sh).value).replace(/,/g,''));if($('#t-c-'+k,sh).checked&&!(v>0))rerr='Enter a rate above zero for '+CUR[k].sym+'.';rates[k]=v>0?v:(d.rates[k]||DEFAULT_RATES[k])});
-      err('#t-r-err',rerr);
+      ok=err('#t-r-err',rerr)&&ok;
       if(!ok)return;
       var now=Date.now();
-      var rec={id:isEdit?t.id:uid(),name:name,start:st||'',end:en||'',people:[{name:n0,colour:d.people[0].colour},{name:n1,colour:d.people[1].colour}],currencies:enabled(),rates:rates,defCur:d.defCur,settled:isEdit?$('#t-settled',sh).checked:false,createdAt:isEdit?t.createdAt:now,updatedAt:now};
+      var rec={id:isEdit?t.id:uid(),name:name,start:st||'',end:en||'',people:d.people.map(function(p,i){return {name:names[i],colour:p.colour}}),currencies:enabled(),rates:rates,defCur:d.defCur,settled:isEdit?$('#t-settled',sh).checked:false,createdAt:isEdit?t.createdAt:now,updatedAt:now};
+      /* someone removed from the middle: point every entry at the people's new places */
+      if(isEdit&&d.people.some(function(p,i){return p.o!==i&&p.o!=null})){
+        var map={};d.people.forEach(function(p,i){if(p.o!=null)map[p.o]=i});
+        var moved=[],lost=false;
+        tabEntries(t).forEach(function(e){
+          var x=clone(e);function m(i){if(map[i]==null)lost=true;return map[i]}
+          x.payer=m(e.payer);
+          if(e.kind==='payment')x.to=m(payTo(e));
+          else if(e.split){x.split.who=splitWho(e).map(m)}
+          moved.push(x);
+        });
+        if(lost){err('#t-p-err','Someone you removed is still on an entry. Close this and try again.');return}
+        moved.forEach(function(x){S.entries[x.id]=x;enqueue('entries',x.id,x)});
+        var Lp=last(t);if(Lp.payer!=null)setLast(t,{cur:Lp.cur,payer:map[Lp.payer]!=null?map[Lp.payer]:0});
+      }
       S.cur=rec.id;put('tabs',rec.id,rec);closeSheet();toast(isEdit?'Tab saved':'Tab started');
     });
     if(isEdit)$('#t-del',sh).addEventListener('click',function(ev){
@@ -1055,7 +1287,7 @@ function tabSheet(t){
       tabEntries(t).forEach(function(x){delete S.entries[x.id];enqueue('entries',x.id,null)});
       S.cur=null;put('tabs',t.id,null);closeSheet();toast('Tab deleted');
     });
-    upd();
+    drawPeople();upd();
     if(!isEdit)$('#t-name',sh).focus();
   },foot);
 }
@@ -1064,8 +1296,9 @@ function tabSheet(t){
 function tabsSheet(){
   var l=tabList();
   var body='<ul class="rows">'+l.map(function(t){
-    var c=calc(tabEntries(t));var net0=c.net[0];
-    var line=t.settled?'Settled':!c.nExp&&!c.nPay?'No entries yet':net0===0?'All square':pname(t,net0>0?1:0)+' owes '+pname(t,net0>0?0:1)+' '+fmt(Math.abs(net0),'HKD');
+    var N=t.people.length,c=calc(tabEntries(t),N),tr=c.transfers;
+    var line=t.settled?'Settled':!c.nExp&&!c.nPay?'No entries yet':!tr.length?'All square':tr.length===1?pname(t,tr[0].from)+' owes '+pname(t,tr[0].to)+' '+fmt(tr[0].amt,'HKD'):tr.length+' payments to settle';
+    if(N>2)line=N+' people · '+line;
     var cur=t.id===S.cur;
     return '<li><button class="rowb" data-tab="'+esc(t.id)+'"'+(cur?' aria-current="true"':'')+'><span class="rb-m"><span class="rb-t">'+esc(t.name)+'</span><span class="rb-s">'+esc(line)+'</span></span><span class="rb-a"><span class="tl-meta mono">'+(t.start?dmy(t.start):'')+'</span>'+(cur?'<span class="tl-meta">Open</span>':'')+'</span></button></li>';
   }).join('')+'</ul>'+
@@ -1104,6 +1337,7 @@ $('#daysview').addEventListener('click',function(ev){
   var r=ev.target.closest('.drow');if(r){S.calSel=r.dataset.d;S.view='cal';lsSet('splitedb:view','cal');render();var v=$('#vtabs');if(v&&v.scrollIntoView)v.scrollIntoView({block:'start',behavior:'smooth'});return}
   if(ev.target.closest('[data-share]'))shareSheet();
 });
+$('#settle').addEventListener('click',function(ev){var b=ev.target.closest('.srow');if(!b||b.disabled)return;entrySheet(null,{kind:'payment',payer:+b.dataset.from,to:+b.dataset.to,base:+b.dataset.amt})});
 $('#ledger').addEventListener('click',function(ev){var b=ev.target.closest('.rowb');if(!b||b.disabled)return;var e=S.entries[b.dataset.id];if(e)entrySheet(e)});
 
 /* ── back up / restore ─────────────────────────────────── */
@@ -1150,7 +1384,7 @@ function restoreSheet(){
       var o;try{o=JSON.parse(txt)}catch(e){err('That is not a complete Splitedb backup. Check the whole text was copied.');return}
       if(!o||o.app!=='splitedb'||!Array.isArray(o.tabs)||!Array.isArray(o.entries)){err('That is not a Splitedb backup.');return}
       var nt=0,ne=0;
-      o.tabs.forEach(function(t){if(t&&ID_OK.test(t.id||'')&&t.people&&t.people.length===2&&t.name){S.tabs[t.id]=t;enqueue('tabs',t.id,t);nt++}});
+      o.tabs.forEach(function(t){if(t&&ID_OK.test(t.id||'')&&t.people&&t.people.length>=2&&t.people.length<=MAXP&&t.name){S.tabs[t.id]=t;enqueue('tabs',t.id,t);nt++}});
       o.entries.forEach(function(e){if(e&&ID_OK.test(e.id||'')&&e.tabId&&typeof e.base==='number'&&typeof e.amount==='number'&&CUR[e.cur]){S.entries[e.id]=e;enqueue('entries',e.id,e);ne++}});
       if(!nt&&!ne){err('That backup has no tabs or entries in it.');return}
       S.ready=true;saveCache();closeSheet();render();
@@ -1167,7 +1401,7 @@ if(!window.claude&&/^(https:|http:)$/.test(location.protocol)&&(location.protoco
   if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(function(){});
 }
 
-window.SplitedbEngine={parseAmount:parseAmount,toBase:toBase,fromBase:fromBase,splitPct:splitPct,splitExact:splitExact,calc:calc,fmt:fmt};
+window.SplitedbEngine={parseAmount:parseAmount,toBase:toBase,fromBase:fromBase,splitPct:splitPct,splitExact:splitExact,splitEq:splitEq,shares:shares,settle:settle,calc:calc,fmt:fmt};
 render();
 initDb();
 })();
